@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/xinsnake/databricks-sdk-golang/azure/dbfs/httpmodels"
 	"github.com/xinsnake/databricks-sdk-golang/azure/dbfs/models"
 )
 
@@ -48,8 +49,8 @@ type DbfsCreateResponse struct {
 }
 
 // Create opens a stream to write to a file and returns a handle to this stream
-func (a DbfsAPI) Create(path string, overwrite bool) (DbfsCreateResponse, error) {
-	var createResponse DbfsCreateResponse
+func (a DbfsAPI) Create(path string, overwrite bool) (httpmodels.CreateResp, error) {
+	var createResponse httpmodels.CreateResp
 
 	data := struct {
 		Path      string `json:"path,omitempty" url:"path,omitempty"`
