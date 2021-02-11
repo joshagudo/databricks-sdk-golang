@@ -43,10 +43,6 @@ func (a DbfsAPI) Close(handle int64) error {
 	return err
 }
 
-// DbfsCreateResponse is the response from Create
-type DbfsCreateResponse struct {
-	Handle int64 `json:"handle,omitempty" url:"handle,omitempty"`
-}
 
 // Create opens a stream to write to a file and returns a handle to this stream
 func (a DbfsAPI) Create(path string, overwrite bool) (httpmodels.CreateResp, error) {
@@ -83,8 +79,8 @@ func (a DbfsAPI) Delete(path string, recursive bool) error {
 }
 
 // GetStatus gets the file information of a file or directory
-func (a DbfsAPI) GetStatus(path string) (models.FileInfo, error) {
-	var fileInfo models.FileInfo
+func (a DbfsAPI) GetStatus(path string) (httpmodels.GetStatusResp, error) {
+	var fileInfo httpmodels.GetStatusResp
 
 	data := struct {
 		Path string `json:"path,omitempty" url:"path,omitempty"`
@@ -101,14 +97,10 @@ func (a DbfsAPI) GetStatus(path string) (models.FileInfo, error) {
 	return fileInfo, err
 }
 
-// DbfsListResponse is a list of FileInfo as a response of List
-type DbfsListResponse struct {
-	Files []models.FileInfo `json:"files,omitempty" url:"files,omitempty"`
-}
 
 // List lists the contents of a directory, or details of the file
-func (a DbfsAPI) List(path string) ([]models.FileInfo, error) {
-	var listResponse DbfsListResponse
+func (a DbfsAPI) List(path string) (httpmodels.ListResp, error) {
+	var listResponse httpmodels.ListResp
 
 	data := struct {
 		Path string `json:"path,omitempty" url:"path,omitempty"`
@@ -118,11 +110,11 @@ func (a DbfsAPI) List(path string) ([]models.FileInfo, error) {
 	resp, err := a.Client.performQuery(http.MethodGet, "/dbfs/list", data, nil)
 
 	if err != nil {
-		return listResponse.Files, err
+		return listResponse, err
 	}
 
 	err = json.Unmarshal(resp, &listResponse)
-	return listResponse.Files, err
+	return listResponse, err
 }
 
 // Mkdirs creates the given directory and necessary parent directories if they do not exist
@@ -164,18 +156,9 @@ func (a DbfsAPI) Put(path string, contents []byte, overwrite bool) error {
 	return err
 }
 
-// DbfsReadResponse is the response of reading a file
-type DbfsReadResponse struct {
-	BytesRead int64  `json:"bytes_read,omitempty" url:"bytes_read,omitempty"`
-	Data      []byte `json:"data,omitempty" url:"data,omitempty"`
-}
-
 // Read returns the contents of a file
-func (a DbfsAPI) Read(path string, offset, length int64) (DbfsReadResponse, error) {
-	var readResponseBase64 struct {
-		BytesRead int64  `json:"bytes_read,omitempty" url:"bytes_read,omitempty"`
-		Data      string `json:"data,omitempty" url:"data,omitempty"`
-	}
+func (a DbfsAPI) Read(path string, offset, length int64) (httpmodels.ReadResp, error) {
+	var readResponseBase64 httpmodels.ReadRespBase64
 	var readResponse DbfsReadResponse
 
 	data := struct {
