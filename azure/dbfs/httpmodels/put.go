@@ -1,10 +1,7 @@
 package httpmodels
 
-type CreateReq struct {
+type PutReq struct {
 	Path      string `json:"path,omitempty" url:"path,omitempty"`
+	Contents  string `json:"contents,omitempty" url:"contents,omitempty"`
 	Overwrite bool   `json:"overwrite,omitempty" url:"overwrite,omitempty"`
-}
-
-type CreateResp struct {
-	Handle int64 `json:"handle,omitempty" url:"handle,omitempty"`
 }
