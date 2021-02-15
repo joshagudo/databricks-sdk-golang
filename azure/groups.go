@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/xinsnake/databricks-sdk-golang/azure/groups/httpmodels"
 	"github.com/xinsnake/databricks-sdk-golang/azure/groups/models"
 )
 
@@ -32,20 +33,16 @@ func (a GroupsAPI) AddMember(principalName models.PrincipalName, parentName stri
 	return err
 }
 
-// GroupsCreateResponse is a response with group name for Create
-type GroupsCreateResponse struct {
-	GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
-}
-
 // Create creates a new group with the given name
-func (a GroupsAPI) Create(groupName string) (GroupsCreateResponse, error) {
-	var createResponse GroupsCreateResponse
+func (a GroupsAPI) Create(groupName string) (httpmodels.CreateResp, error) {
+	var createResponse httpmodels.CreateResp
 
 	data := struct {
 		GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
 	}{
 		groupName,
 	}
+
 	resp, err := a.Client.performQuery(http.MethodPost, "/groups/create", data, nil)
 	if err != nil {
 		return createResponse, err
