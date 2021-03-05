@@ -159,12 +159,18 @@ func (a JobsAPI) RunsGet(runID int64) (models.Run, error) {
 }
 
 // RunsExport exports and retrieve the job run task
-func (a JobsAPI) RunsExport(runID int64) ([]models.ViewItem, error) {
+func (a JobsAPI) RunsExport(runID int64, viewsToExport models.ViewsToExport) ([]models.ViewItem, error) {
 	var viewItemsView = struct {
 		Views []models.ViewItem `json:"views,omitempty" url:"views,omitempty"`
 	}{}
 
-	data := httpmodels.GenericRunReq{RunID: runID}
+	data := struct {
+		RunID         int64                `json:"run_id,omitempty" url:"run_id,omitempty"`
+		ViewsToExport models.ViewsToExport `json:"views_to_export,omitempty" url:"views_to_export,omitempty"`
+	}{
+		runID,
+		viewsToExport,
+	}
 	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/export", data, nil)
 	if err != nil {
 		return viewItemsView.Views, err
