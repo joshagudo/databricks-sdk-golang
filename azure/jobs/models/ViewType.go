@@ -5,4 +5,5 @@ type ViewType string
 const (
 	ViewTypeNotebook  = "NOTEBOOK"
 	ViewTypeDashboard = "DASHBOARD"
+	ALL               = "ALL"
 )
