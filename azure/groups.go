@@ -20,14 +20,10 @@ func (a GroupsAPI) init(client DBClient) GroupsAPI {
 
 // AddMember adds a user or group to a group
 func (a GroupsAPI) AddMember(principalName models.PrincipalName, parentName string) error {
-	data := struct {
-		UserName   string `json:"user_name,omitempty" url:"user_name,omitempty"`
-		GroupName  string `json:"group_name,omitempty" url:"group_name,omitempty"`
-		ParentName string `json:"parent_name,omitempty" url:"parent_name,omitempty"`
-	}{
-		principalName.UserName,
-		principalName.GroupName,
-		parentName,
+	data := httpmodels.GenericMemberReq{
+		UserName:   principalName.UserName,
+		GroupName:  principalName.GroupName,
+		ParentName: parentName,
 	}
 	_, err := a.Client.performQuery(http.MethodPost, "/groups/add-member", data, nil)
 	return err
@@ -37,12 +33,7 @@ func (a GroupsAPI) AddMember(principalName models.PrincipalName, parentName stri
 func (a GroupsAPI) Create(groupName string) (httpmodels.CreateResp, error) {
 	var createResponse httpmodels.CreateResp
 
-	data := struct {
-		GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
-	}{
-		groupName,
-	}
-
+	data := httpmodels.GenericGroupReq{GroupName: groupName}
 	resp, err := a.Client.performQuery(http.MethodPost, "/groups/create", data, nil)
 	if err != nil {
 		return createResponse, err
@@ -58,11 +49,7 @@ func (a GroupsAPI) ListMembers(groupName string) ([]models.PrincipalName, error)
 		Members []models.PrincipalName `json:"members,omitempty" url:"members,omitempty"`
 	}
 
-	data := struct {
-		GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
-	}{
-		groupName,
-	}
+	data := httpmodels.GenericGroupReq{GroupName: groupName}
 	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list-members", data, nil)
 	if err != nil {
 		return membersResponse.Members, err
@@ -93,14 +80,11 @@ func (a GroupsAPI) ListParents(principalName models.PrincipalName) ([]string, er
 		GroupNames []string `json:"group_names,omitempty" url:"group_names,omitempty"`
 	}
 
-	data := struct {
-		UserName  string `json:"user_name,omitempty" url:"user_name,omitempty"`
-		GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
-	}{
-		principalName.UserName,
-		principalName.GroupName,
+	data := httpmodels.GenericMemberReq{
+		UserName:  principalName.UserName,
+		GroupName: principalName.GroupName,
 	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list-members", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list-parents", data, nil)
 	if err != nil {
 		return listParentsResponse.GroupNames, err
 	}
@@ -111,14 +95,10 @@ func (a GroupsAPI) ListParents(principalName models.PrincipalName) ([]string, er
 
 // RemoveMember removes a user or group from a group
 func (a GroupsAPI) RemoveMember(principalName models.PrincipalName, parentName string) error {
-	data := struct {
-		UserName   string `json:"user_name,omitempty" url:"user_name,omitempty"`
-		GroupName  string `json:"group_name,omitempty" url:"group_name,omitempty"`
-		ParentName string `json:"parent_name,omitempty" url:"parent_name,omitempty"`
-	}{
-		principalName.UserName,
-		principalName.GroupName,
-		parentName,
+	data := httpmodels.GenericMemberReq{
+		UserName:   principalName.UserName,
+		GroupName:  principalName.GroupName,
+		ParentName: parentName,
 	}
 	_, err := a.Client.performQuery(http.MethodPost, "/groups/remove-member", data, nil)
 	return err
@@ -126,11 +106,7 @@ func (a GroupsAPI) RemoveMember(principalName models.PrincipalName, parentName s
 
 // Delete removes a group from this organization
 func (a GroupsAPI) Delete(groupName string) error {
-	data := struct {
-		GroupName string `json:"group_name,omitempty" url:"group_name,omitempty"`
-	}{
-		groupName,
-	}
+	data := httpmodels.GenericGroupReq{GroupName: groupName}
 	_, err := a.Client.performQuery(http.MethodPost, "/groups/delete", data, nil)
 	return err
 }
