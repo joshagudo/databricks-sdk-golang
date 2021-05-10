@@ -29,15 +29,15 @@ Everything except SCIM API are implemented. Please refer to the progress below:
 
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
-| Clusters API | ✔ | ✔ |
+| Clusters API | ✔ (Outdated) | ✔ |
 | Cluster Policies API | ✗ | ✗ |
 | DBFS API | ✔ (Outdated) | ✔ (Outdated) |
 | Global Init Scripts API | ✗ | ✗ |
-| Groups API | ✔ | ✔ |
+| Groups API | ✔ (Outdated) | ✔ |
 | Instance Pools API | ✗ | ✗ |
 | Instance Profiles API | ✔ (Outdated) | N/A |
 | IP Access List API | ✗ | ✗ |
-| Jobs API | ✔ | ✔ |
+| Jobs API | ✔ (Outdated) | ✔ |
 | Libraries API | ✔ (Outdated) | ✔ (Outdated) |
 | MLflow* API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
@@ -46,6 +46,8 @@ Everything except SCIM API are implemented. Please refer to the progress below:
 | Token API | ✔ (Outdated) | ✔ (Outdated) |
 | Token Management API | ✗ | ✗ |
 | Workspace API | ✔ (Outdated) | ✔ (Outdated) |
+
+* SCIM and MLflow are separate systems that is planned differently.
 
 ## Notes
 
