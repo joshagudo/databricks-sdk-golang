@@ -30,17 +30,22 @@ Everything except SCIM API are implemented. Please refer to the progress below:
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
 | Clusters API | ✔ | ✔ |
-| DBFS API | ✔ | ✔ |
+| Cluster Policies API | ✗ | ✗ |
+| DBFS API | ✔ (Outdated) | ✔ (Outdated) |
+| Global Init Scripts API | ✗ | ✗ |
 | Groups API | ✔ | ✔ |
-| Instance Pools API (preview) | ✗ | ✗ |
-| Instance Profiles API | ✔ | N/A |
+| Instance Pools API | ✗ | ✗ |
+| Instance Profiles API | ✔ (Outdated) | N/A |
+| IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ | ✔ |
-| Libraries API | ✔ | ✔ |
-| MLflow API | ✗ | ✗ |
-| SCIM API (preview) | ✗ | ✗ |
-| Secrets API | ✔ | ✔ |
-| Token API | ✔ | ✔ |
-| Workspace API | ✔ | ✔ |
+| Libraries API | ✔ (Outdated) | ✔ (Outdated) |
+| MLflow* API | ✗ | ✗ |
+| Permissions API | ✗ | ✗ |
+| SCIM* API | ✗ | ✗ |
+| Secrets API | ✔ (Outdated) | ✔ (Outdated) |
+| Token API | ✔ (Outdated) | ✔ (Outdated) |
+| Token Management API | ✗ | ✗ |
+| Workspace API | ✔ (Outdated) | ✔ (Outdated) |
 
 ## Notes
 
