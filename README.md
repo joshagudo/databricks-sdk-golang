@@ -25,8 +25,6 @@ jobs, err := c.Jobs().List()
 
 ## Implementation Progress
 
-Everything except SCIM API are implemented. Please refer to the progress below:
-
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
 | Clusters API | ✔ (Outdated) | ✔ |
@@ -39,15 +37,15 @@ Everything except SCIM API are implemented. Please refer to the progress below:
 | IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ (Outdated) | ✔ |
 | Libraries API | ✔ (Outdated) | ✔ (Outdated) |
-| MLflow* API | ✗ | ✗ |
+| MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
-| SCIM* API | ✗ | ✗ |
+| SCIM** API | ✗ | ✗ |
 | Secrets API | ✔ (Outdated) | ✔ (Outdated) |
 | Token API | ✔ (Outdated) | ✔ (Outdated) |
 | Token Management API | ✗ | ✗ |
 | Workspace API | ✔ (Outdated) | ✔ (Outdated) |
 
-* SCIM and MLflow are separate systems that is planned differently.
+** SCIM and MLflow are separate systems that are planned differently.
 
 ## Notes
 
