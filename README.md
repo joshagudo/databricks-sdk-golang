@@ -27,6 +27,7 @@ jobs, err := c.Jobs().List()
 
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
+| Account API | ✗ | N/A |
 | Clusters API | ✔ (Outdated) | ✔ |
 | Cluster Policies API | ✗ | ✗ |
 | DBFS API | ✔ (Outdated) | ✔ (Outdated) |
