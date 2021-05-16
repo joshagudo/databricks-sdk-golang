@@ -47,7 +47,3 @@ jobs, err := c.Jobs().List()
 | Workspace API | ✔ (Outdated) | ✔ (Outdated) |
 
 ** SCIM and MLflow are separate systems that are planned differently.
-
-## Notes
-
-- [Deepcopy](https://godoc.org/k8s.io/gengo/examples/deepcopy-gen) is generated shall you need it.
