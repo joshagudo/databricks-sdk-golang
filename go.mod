@@ -1,4 +1,4 @@
-module github.com/xinsnake/databricks-sdk-golang
+module github.com/polar-rams/databricks-sdk-golang
 
 go 1.12
 

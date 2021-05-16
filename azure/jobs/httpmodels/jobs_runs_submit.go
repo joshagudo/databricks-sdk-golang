@@ -1,7 +1,7 @@
 package httpmodels
 
 import (
-	"github.com/xinsnake/databricks-sdk-golang/azure/jobs/models"
+	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/models"
 )
 
 type JobsRunsSubmitReq struct {

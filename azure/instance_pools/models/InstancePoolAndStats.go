@@ -1,7 +1,7 @@
 package models
 	
 import (
-	clusterModels 		"github.com/xinsnake/databricks-sdk-golang/azure/clusters/models"
+	clusterModels 		"github.com/polar-rams/databricks-sdk-golang/azure/clusters/models"
 )
 
 type InstancePoolAndStats struct {

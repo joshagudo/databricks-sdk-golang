@@ -1,7 +1,7 @@
 package models
 
 import (
-	libraryModels "github.com/xinsnake/databricks-sdk-golang/azure/libraries/models"
+	libraryModels "github.com/polar-rams/databricks-sdk-golang/azure/libraries/models"
 )
 
 type ClusterSpec struct {

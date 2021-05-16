@@ -8,9 +8,9 @@ This is a Golang SDK for [DataBricks REST API 2.0](https://docs.databricks.com/a
 
 ```go
 import (
-  databricks "github.com/xinsnake/databricks-sdk-golang"
-  dbAzure "github.com/xinsnake/databricks-sdk-golang/azure"
-  // dbAws "github.com/xinsnake/databricks-sdk-golang/aws"
+  databricks "github.com/polar-rams/databricks-sdk-golang"
+  dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
+  // dbAws "github.com/polar-rams/databricks-sdk-golang/aws"
 )
 
 var o databricks.DBClientOption
