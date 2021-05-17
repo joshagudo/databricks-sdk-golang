@@ -42,7 +42,7 @@ jobs, err := c.Jobs().List()
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
 | Secrets API | ✔ (Outdated) | ✔ (Outdated) |
-| Token API | ✔ (Outdated) | ✔ (Outdated) |
+| Token API | ✔ (Outdated) | ✔ |
 | Token Management API | ✗ | ✗ |
 | Workspace API | ✔ (Outdated) | ✔ (Outdated) |
 
