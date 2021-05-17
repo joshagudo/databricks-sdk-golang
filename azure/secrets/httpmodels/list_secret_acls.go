@@ -2,10 +2,10 @@ package httpmodels
 
 import "github.com/polar-rams/databricks-sdk-golang/aws/models"
 
-type ListSecretAclsReq struct {
+type ListSecretACLsReq struct {
 	Scope string `json:"scope,omitempty" url:"scope,omitempty"`
 }
 
-type ListSecretAclsResp struct {
-	Items *models.AclItem `json:"items,omitempty" url:"items,omitempty"`
+type ListSecretACLsResp struct {
+	Items *models.ACLItem `json:"items,omitempty" url:"items,omitempty"`
 }
