@@ -8,9 +8,9 @@ This is a Golang SDK for [DataBricks REST API 2.0](https://docs.databricks.com/a
 
 ```go
 import (
-  databricks "github.com/xinsnake/databricks-sdk-golang"
-  dbAzure "github.com/xinsnake/databricks-sdk-golang/azure"
-  // dbAws "github.com/xinsnake/databricks-sdk-golang/aws"
+  databricks "github.com/polar-rams/databricks-sdk-golang"
+  dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
+  // dbAws "github.com/polar-rams/databricks-sdk-golang/aws"
 )
 
 var o databricks.DBClientOption
@@ -25,23 +25,25 @@ jobs, err := c.Jobs().List()
 
 ## Implementation Progress
 
-Everything except SCIM API are implemented. Please refer to the progress below:
-
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
-| Clusters API | ✔ | ✔ |
-| DBFS API | ✔ | ✔ |
-| Groups API | ✔ | ✔ |
-| Instance Pools API (preview) | ✗ | ✗ |
-| Instance Profiles API | ✔ | N/A |
-| Jobs API | ✔ | ✔ |
-| Libraries API | ✔ | ✔ |
-| MLflow API | ✗ | ✗ |
-| SCIM API (preview) | ✗ | ✗ |
-| Secrets API | ✔ | ✔ |
-| Token API | ✔ | ✔ |
-| Workspace API | ✔ | ✔ |
+| Account API | ✗ | N/A |
+| Clusters API | ✔ (Outdated) | ✔ |
+| Cluster Policies API | ✗ | ✗ |
+| DBFS API | ✔ (Outdated) | ✔ (Outdated) |
+| Global Init Scripts API | ✗ | ✗ |
+| Groups API | ✔ (Outdated) | ✔ |
+| Instance Pools API | ✗ | ✗ |
+| Instance Profiles API | ✔ (Outdated) | N/A |
+| IP Access List API | ✗ | ✗ |
+| Jobs API | ✔ (Outdated) | ✔ |
+| Libraries API | ✔ (Outdated) | ✔ |
+| MLflow** API | ✗ | ✗ |
+| Permissions API | ✗ | ✗ |
+| SCIM** API | ✗ | ✗ |
+| Secrets API | ✔ (Outdated) | ✔ |
+| Token API | ✔ (Outdated) | ✔ |
+| Token Management API | ✗ | ✗ |
+| Workspace API | ✔ (Outdated) | ✔ |
 
-## Notes
-
-- [Deepcopy](https://godoc.org/k8s.io/gengo/examples/deepcopy-gen) is generated shall you need it.
+** SCIM and MLflow are separate systems that are planned differently.

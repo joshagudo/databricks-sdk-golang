@@ -13,6 +13,7 @@ type Run struct {
 	ClusterInstance      *ClusterInstance `json:"cluster_instance,omitempty" url:"cluster_instance,omitempty"`
 	OverridingParameters *RunParameters   `json:"overriding_parameters,omitempty" url:"overriding_parameters,omitempty"`
 	StartTime            int64            `json:"start_time,omitempty" url:"start_time,omitempty"`
+	EndTime              int64            `json:"end_time,omitempty" url:"end_time,omitempty"`
 	SetupDuration        int64            `json:"setup_duration,omitempty" url:"setup_duration,omitempty"`
 	ExecutionDuration    int64            `json:"execution_duration,omitempty" url:"execution_duration,omitempty"`
 	CleanupDuration      int64            `json:"cleanup_duration,omitempty" url:"cleanup_duration,omitempty"`

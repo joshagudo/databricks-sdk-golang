@@ -1,6 +1,6 @@
 package azure
 
-import databricks "github.com/xinsnake/databricks-sdk-golang"
+import databricks "github.com/polar-rams/databricks-sdk-golang"
 
 // DBClient is the client for Azure implements DBClient
 type DBClient struct {
@@ -48,12 +48,6 @@ func (c DBClient) Jobs() JobsAPI {
 func (c DBClient) Libraries() LibrariesAPI {
 	var libraries LibrariesAPI
 	return libraries.init(c)
-}
-
-// Scim returns an instance of ScimAPI
-func (c DBClient) Scim() ScimAPI {
-	var scimAPI ScimAPI
-	return scimAPI.init(c)
 }
 
 // Secrets returns an instance of SecretsAPI

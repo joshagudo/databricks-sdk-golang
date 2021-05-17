@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/xinsnake/databricks-sdk-golang/azure/libraries/models"
+	"github.com/polar-rams/databricks-sdk-golang/azure/libraries/httpmodels"
 )
 
 // LibrariesAPI exposes the Libraries API
@@ -18,66 +18,39 @@ func (a LibrariesAPI) init(client DBClient) LibrariesAPI {
 }
 
 // AllClusterStatuses gets the status of all libraries on all clusters
-func (a LibrariesAPI) AllClusterStatuses() ([]models.ClusterLibraryStatuses, error) {
-	var allClusterStatusesResponse struct {
-		Statuses []models.ClusterLibraryStatuses `json:"statuses,omitempty" url:"statuses,omitempty"`
-	}
+func (a LibrariesAPI) AllClusterStatuses() (httpmodels.AllClusterStatusesResp, error) {
+	var allClusterStatusesResp httpmodels.AllClusterStatusesResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/libraries/all-cluster-statuses", nil, nil)
 	if err != nil {
-		return allClusterStatusesResponse.Statuses, err
+		return allClusterStatusesResp, err
 	}
 
-	err = json.Unmarshal(resp, &allClusterStatusesResponse)
-	return allClusterStatusesResponse.Statuses, err
-}
-
-// LibrariesClusterStatusResponse is a response from AllClusterStatuses
-type LibrariesClusterStatusResponse struct {
-	ClusterID       string                     `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
-	LibraryStatuses []models.LibraryFullStatus `json:"library_statuses,omitempty" url:"library_statuses,omitempty"`
+	err = json.Unmarshal(resp, &allClusterStatusesResp)
+	return allClusterStatusesResp, err
 }
 
 // ClusterStatus get the status of libraries on a cluster
-func (a LibrariesAPI) ClusterStatus(clusterID string) (LibrariesClusterStatusResponse, error) {
-	var clusterStatusResponse LibrariesClusterStatusResponse
+func (a LibrariesAPI) ClusterStatus(clusterStatusReq httpmodels.ClusterStatusReq) (httpmodels.ClusterStatusResp, error) {
+	var clusterStatusResp httpmodels.ClusterStatusResp
 
-	data := struct {
-		ClusterID string `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
-	}{
-		clusterID,
-	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/libraries/cluster-status", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/libraries/cluster-status", clusterStatusReq, nil)
 	if err != nil {
-		return clusterStatusResponse, err
+		return clusterStatusResp, err
 	}
 
-	err = json.Unmarshal(resp, &clusterStatusResponse)
-	return clusterStatusResponse, err
+	err = json.Unmarshal(resp, &clusterStatusResp)
+	return clusterStatusResp, err
 }
 
 // Install installs libraries on a cluster
-func (a LibrariesAPI) Install(clusterID string, libraries []models.Library) error {
-	data := struct {
-		ClusterID string           `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
-		Libraries []models.Library `json:"libraries,omitempty" url:"libraries,omitempty"`
-	}{
-		clusterID,
-		libraries,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/libraries/install", data, nil)
+func (a LibrariesAPI) Install(installReq httpmodels.InstallReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/libraries/install", installReq, nil)
 	return err
 }
 
 // Uninstall sets libraries to be uninstalled on a cluster
-func (a LibrariesAPI) Uninstall(clusterID string, libraries []models.Library) error {
-	data := struct {
-		ClusterID string           `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
-		Libraries []models.Library `json:"libraries,omitempty" url:"libraries,omitempty"`
-	}{
-		clusterID,
-		libraries,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/libraries/uninstall", data, nil)
+func (a LibrariesAPI) Uninstall(uninstallReq httpmodels.UninstallReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/libraries/uninstall", uninstallReq, nil)
 	return err
 }

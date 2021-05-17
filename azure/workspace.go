@@ -1,11 +1,10 @@
 package azure
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"net/http"
 
-	"github.com/xinsnake/databricks-sdk-golang/azure/workspace/models"
+	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
 )
 
 // WorkspaceAPI exposes the Workspace API
@@ -18,116 +17,59 @@ func (a WorkspaceAPI) init(client DBClient) WorkspaceAPI {
 	return a
 }
 
-// Delete deletes an object or a directory (and optionally recursively deletes all objects in the directory)
-func (a WorkspaceAPI) Delete(path string, recursive bool) error {
-	data := struct {
-		Path      string `json:"path,omitempty" url:"path,omitempty"`
-		Recursive bool   `json:"recursive,omitempty" url:"recursive,omitempty"`
-	}{
-		path,
-		recursive,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/workspace/delete", data, nil)
+// Delete an object or a directory (and optionally recursively deletes all objects in the directory)
+func (a WorkspaceAPI) Delete(deleteReq httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/workspace/delete", deleteReq, nil)
 	return err
 }
 
-// Export exports a notebook or contents of an entire directory
-func (a WorkspaceAPI) Export(path string, format models.ExportFormat, directDownload bool) ([]byte, error) {
-	var exportResponse struct {
-		Content string `json:"content,omitempty" url:"content,omitempty"`
-	}
+// Export a notebook or contents of an entire directory
+func (a WorkspaceAPI) Export(exportReq httpmodels.ExportReq) (httpmodels.ExportResp, error) {
+	var exportResp httpmodels.ExportResp
 
-	data := struct {
-		Path           string              `json:"path,omitempty" url:"path,omitempty"`
-		Format         models.ExportFormat `json:"format,omitempty" url:"format,omitempty"`
-		DirectDownload bool                `json:"direct_download,omitempty" url:"direct_download,omitempty"`
-	}{
-		path,
-		format,
-		directDownload,
-	}
-
-	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/export", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/export", exportReq, nil)
 	if err != nil {
-		return []byte{}, err
+		return exportResp, err
 	}
 
-	err = json.Unmarshal(resp, &exportResponse)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return base64.StdEncoding.DecodeString(exportResponse.Content)
+	err = json.Unmarshal(resp, &exportReq)
+	return exportResp, err
 }
 
-// GetStatus gets the status of an object or a directory
-func (a WorkspaceAPI) GetStatus(path string) (models.ObjectInfo, error) {
-	var objectInfo models.ObjectInfo
+// Gets the status of an object or a directory
+func (a WorkspaceAPI) GetStatus(getStatusReq httpmodels.GetStatusReq) (httpmodels.GetStatusResp, error) {
+	var getStatusResp httpmodels.GetStatusResp
 
-	data := struct {
-		Path string `json:"path,omitempty" url:"path,omitempty"`
-	}{
-		path,
-	}
-
-	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/get-status", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/get-status", getStatusReq, nil)
 	if err != nil {
-		return objectInfo, err
+		return getStatusResp, err
 	}
 
-	err = json.Unmarshal(resp, &objectInfo)
-	return objectInfo, err
+	err = json.Unmarshal(resp, &getStatusResp)
+	return getStatusResp, err
 }
 
-// Import imports a notebook or the contents of an entire directory
-func (a WorkspaceAPI) Import(path string, format models.ExportFormat,
-	language models.Language, content []byte, overwrite bool) error {
-
-	data := struct {
-		Path      string              `json:"path,omitempty" url:"path,omitempty"`
-		Format    models.ExportFormat `json:"format,omitempty" url:"format,omitempty"`
-		Language  models.Language     `json:"language,omitempty" url:"language,omitempty"`
-		Content   string              `json:"content,omitempty" url:"content,omitempty"`
-		Overwrite bool                `json:"overwrite,omitempty" url:"overwrite,omitempty"`
-	}{
-		path,
-		format,
-		language,
-		base64.StdEncoding.EncodeToString(content),
-		overwrite,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/workspace/import", data, nil)
+// Import a notebook or the contents of an entire directory
+func (a WorkspaceAPI) Import(importReq httpmodels.ImportReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/workspace/import", importReq, nil)
 	return err
 }
 
 // List lists the contents of a directory, or the object if it is not a directory
-func (a WorkspaceAPI) List(path string) ([]models.ObjectInfo, error) {
-	var listResponse struct {
-		Objects []models.ObjectInfo `json:"objects,omitempty" url:"objects,omitempty"`
-	}
+func (a WorkspaceAPI) List(listReq httpmodels.ListReq) (httpmodels.ListResp, error) {
+	var listResp httpmodels.ListResp
 
-	data := struct {
-		Path string `json:"path,omitempty" url:"path,omitempty"`
-	}{
-		path,
-	}
-
-	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/list", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/workspace/list", listReq, nil)
 	if err != nil {
-		return listResponse.Objects, err
+		return listResp, err
 	}
 
-	err = json.Unmarshal(resp, &listResponse)
-	return listResponse.Objects, err
+	err = json.Unmarshal(resp, &listResp)
+	return listResp, err
 }
 
 // Mkdirs creates the given directory and necessary parent directories if they do not exists
-func (a WorkspaceAPI) Mkdirs(path string) error {
-	data := struct {
-		Path string `json:"path,omitempty" url:"path,omitempty"`
-	}{
-		path,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/workspace/mkdirs", data, nil)
+func (a WorkspaceAPI) Mkdirs(mkdirsReq httpmodels.MkdirsReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/workspace/mkdirs", mkdirsReq, nil)
 	return err
 }
