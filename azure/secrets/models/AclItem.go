@@ -1,6 +1,6 @@
 package models
 
-type AclItem struct {
+type ACLItem struct {
 	Principal  string         `json:"principal,omitempty" url:"principal,omitempty"`
-	Permission *AclPermission `json:"permission,omitempty" url:"permission,omitempty"`
+	Permission *ACLPermission `json:"permission,omitempty" url:"permission,omitempty"`
 }

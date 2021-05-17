@@ -41,7 +41,7 @@ jobs, err := c.Jobs().List()
 | MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
-| Secrets API | ✔ (Outdated) | ✔ (Outdated) |
+| Secrets API | ✔ (Outdated) | ✔ |
 | Token API | ✔ (Outdated) | ✔ |
 | Token Management API | ✗ | ✗ |
 | Workspace API | ✔ (Outdated) | ✔ |

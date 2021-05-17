@@ -1,9 +1,9 @@
 package models
 
-type AclPermission string
+type ACLPermission string
 
 const (
-	AclPermissionRead   = "READ"
-	AclPermissionWrite  = "WRITE"
-	AclPermissionManage = "MANAGE"
+	ACLPermissionRead   = "READ"
+	ACLPermissionWrite  = "WRITE"
+	ACLPermissionManage = "MANAGE"
 )
