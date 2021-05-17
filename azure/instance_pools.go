@@ -37,36 +37,33 @@ func (a InstancePoolsAPI) Edit(editReq httpmodels.EditReq) error {
 }
 
 // Delete permanently deletes the instance pool.
-func (a InstancePoolsAPI) Delete(instancePoolID string) error {
-
-	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/delete", instancePoolID, nil)
+func (a InstancePoolsAPI) Delete(deleteReq httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/delete", deleteReq, nil)
 	return err
 }
 
-
 // Get retrieves the information for an instance pool given its identifier.
-func (a InstancePoolsAPI) Get(instancePoolID string) (httpmodels.GetResp, error) {
-	var instancePoolInfo httpmodels.GetResp
+func (a InstancePoolsAPI) Get(getReq httpmodels.GetReq) (httpmodels.GetResp, error) {
+	var getResp httpmodels.GetResp
 
-
-	resp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/get", instancePoolID, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/get", getReq, nil)
 	if err != nil {
-		return instancePoolInfo, err
+		return getResp, err
 	}
 
-	err = json.Unmarshal(resp, &instancePoolInfo)
-	return instancePoolInfo, err
+	err = json.Unmarshal(resp, &getResp)
+	return getResp, err
 }
 
 // List returns information for all instance pools.
-func (a InstancePoolsAPI) List() ([]httpmodels.ListResp, error) {
+func (a InstancePoolsAPI) List() (httpmodels.ListResp, error) {
+	var listResp httpmodels.ListResp
 
-	var instancepoollist = struct {
-		InstancePools []httpmodels.ListResp `json:"instance_pools,omitempty" url:"instance_pools,omitempty"`
-	}{}
 	resp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/list", nil, nil)
+	if err != nil {
+		return listResp, err
+	}
 
-
-	err = json.Unmarshal(resp, &instancepoollist)
-	return instancepoollist.InstancePools, err
+	err = json.Unmarshal(resp, &listResp)
+	return listResp, err
 }
