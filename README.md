@@ -44,6 +44,6 @@ jobs, err := c.Jobs().List()
 | Secrets API | ✔ (Outdated) | ✔ (Outdated) |
 | Token API | ✔ (Outdated) | ✔ (Outdated) |
 | Token Management API | ✗ | ✗ |
-| Workspace API | ✔ (Outdated) | ✔ (Outdated) |
+| Workspace API | ✔ (Outdated) | ✔ |
 
 ** SCIM and MLflow are separate systems that are planned differently.
