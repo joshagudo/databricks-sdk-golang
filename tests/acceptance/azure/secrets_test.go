@@ -2,57 +2,54 @@ package azure_test
 
 import (
 	"fmt"
-	"log"
-	"os"
+	"math/rand"
 	"testing"
 
 	databricks "github.com/polar-rams/databricks-sdk-golang"
 	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
-	// "testing"
-	// "github.com/onsi/gomega"
 )
 
 func TestAzureCreateSecretsScope(t *testing.T) {
 	var o databricks.DBClientOption
-	o.Host = os.Getenv("DATABRICKS_HOST")
-	o.Token = os.Getenv("DATABRICKS_TOKEN")
+
+	testConfig := GetTestConfig()
+	o.Host = testConfig[DATABRICKS_HOST_KEY]
+	o.Token = testConfig[DATABRICKS_TOKEN_KEY]
 
 	var c dbAzure.DBClient
 	c.Init(o)
 
-	scopeName := "testSecretScope12456"
+	const (
+		scpNmPre = "testSecrScpName"
+		scpGrp   = "users"
+	)
 
-	e := c.Secrets().CreateSecretScope(scopeName, "users")
+	scpNmSuf := fmt.Sprintf("%08d", rand.Intn(100000000))
+	scpNm := fmt.Sprintf("%s%s", scpNmPre, scpNmSuf)
 
-	if e != nil {
-		log.Printf("Error : %v", e)
+	if e := c.Secrets().CreateSecretScope(scpNm, scpGrp); e != nil {
 		t.Error("could not create scope")
 	}
 
-	sc, er := c.Secrets().ListSecretScopes()
-
-	if er != nil {
-		log.Printf("Error : %v", er)
-		t.Error("could not list scope")
+	sc, e := c.Secrets().ListSecretScopes()
+	if e != nil {
+		t.Error("could not list scopes")
 	}
-
 	ssExists := false
 
 	for _, sesc := range sc {
-		if sesc.Name == scopeName {
+		if sesc.Name == scpNm {
 			ssExists = true
 			break
 		}
-		fmt.Printf("sesc: %s\n", sesc.Name)
 	}
 
 	if !ssExists {
-		t.Errorf("expected secret scope %s to exist", scopeName)
+		t.Errorf("expected secret scope %s to exist", scpNm)
 	}
 
-	e = c.Secrets().DeleteSecretScope(scopeName)
+	e = c.Secrets().DeleteSecretScope(scpNm)
 	if e != nil {
-		log.Printf("Error : %v", e)
 		t.Error("could not delete secret scope")
 	}
 
