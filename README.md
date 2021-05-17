@@ -37,7 +37,7 @@ jobs, err := c.Jobs().List()
 | Instance Profiles API | ✔ (Outdated) | N/A |
 | IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ (Outdated) | ✔ |
-| Libraries API | ✔ (Outdated) | ✔ (Outdated) |
+| Libraries API | ✔ (Outdated) | ✔ |
 | MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
