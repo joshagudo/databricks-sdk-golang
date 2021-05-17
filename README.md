@@ -33,7 +33,7 @@ jobs, err := c.Jobs().List()
 | DBFS API | ✔ (Outdated) | ✔ |
 | Global Init Scripts API | ✗ | ✗ |
 | Groups API | ✔ (Outdated) | ✔ |
-| Instance Pools API | ✗ | ✗ |
+| Instance Pools API | ✗ | ✔ |
 | Instance Profiles API | ✔ (Outdated) | N/A |
 | IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ (Outdated) | ✔ |
