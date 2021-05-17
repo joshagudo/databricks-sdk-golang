@@ -37,13 +37,13 @@ jobs, err := c.Jobs().List()
 | Instance Profiles API | ✔ (Outdated) | N/A |
 | IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ (Outdated) | ✔ |
-| Libraries API | ✔ (Outdated) | ✔ (Outdated) |
+| Libraries API | ✔ (Outdated) | ✔ |
 | MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
 | Secrets API | ✔ (Outdated) | ✔ |
-| Token API | ✔ (Outdated) | ✔ (Outdated) |
+| Token API | ✔ (Outdated) | ✔ |
 | Token Management API | ✗ | ✗ |
-| Workspace API | ✔ (Outdated) | ✔ (Outdated) |
+| Workspace API | ✔ (Outdated) | ✔ |
 
 ** SCIM and MLflow are separate systems that are planned differently.
