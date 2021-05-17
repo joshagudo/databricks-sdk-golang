@@ -6,5 +6,5 @@ import (
 
 type CreateResp struct {
 	TokenValue string                 `json:"token_value,omitempty" url:"token_value,omitempty"`
-	TokenInfo  models.PublicTokenInfo `json:"token_info,omitempty" url:"token_info,omitempty"`
+	TokenInfo *models.PublicTokenInfo `json:"token_info,omitempty" url:"token_info,omitempty"`
 }
