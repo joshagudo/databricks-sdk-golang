@@ -4,7 +4,7 @@ import (
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
 )
 
-type ImportRequest struct {
+type ImportReq struct {
 	Path      string               `json:"path,omitempty" url:"path,omitempty"`
 	Format    *models.ExportFormat `json:"format,omitempty" url:"format,omitempty"`
 	Language  *models.Language     `json:"language,omitempty" url:"language,omitempty"`
