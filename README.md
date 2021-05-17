@@ -30,7 +30,7 @@ jobs, err := c.Jobs().List()
 | Account API | ✗ | N/A |
 | Clusters API | ✔ (Outdated) | ✔ |
 | Cluster Policies API | ✗ | ✗ |
-| DBFS API | ✔ (Outdated) | ✔ (Outdated) |
+| DBFS API | ✔ (Outdated) | ✔ |
 | Global Init Scripts API | ✗ | ✗ |
 | Groups API | ✔ (Outdated) | ✔ |
 | Instance Pools API | ✗ | ✗ |

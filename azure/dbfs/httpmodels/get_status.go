@@ -1,6 +1,10 @@
-package models
+package httpmodels
 
-type FileInfo struct {
+type GetStatusReq struct {
+	Path string `json:"path,omitempty" url:"path,omitempty"`
+}
+
+type GetStatusResp struct {
 	Path             string `json:"path,omitempty" url:"path,omitempty"`
 	IsDir            bool   `json:"is_dir,omitempty" url:"is_dir,omitempty"`
 	FileSize         int64  `json:"file_size,omitempty" url:"file_size,omitempty"`
