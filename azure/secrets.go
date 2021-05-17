@@ -1,11 +1,10 @@
 package azure
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"net/http"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/secrets/models"
+	"github.com/polar-rams/databricks-sdk-golang/azure/secrets/httpmodels"
 )
 
 // SecretsAPI exposes the Secrets API
@@ -18,173 +17,90 @@ func (a SecretsAPI) init(client DBClient) SecretsAPI {
 	return a
 }
 
-// CreateSecretScope creates a new secret scope
-func (a SecretsAPI) CreateSecretScope(scope, initialManagePrincipal string) error {
-	data := struct {
-		Scope                  string `json:"scope,omitempty" url:"scope,omitempty"`
-		InitialManagePrincipal string `json:"initial_manage_principal,omitempty" url:"initial_manage_principal,omitempty"`
-	}{
-		scope,
-		initialManagePrincipal,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/scopes/create", data, nil)
+// CreateSecretScope create an Azure Key Vault-backed or Databricks-backed scope
+func (a SecretsAPI) CreateSecretScope(createSecretScope httpmodels.CreateSecretScopeReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/scopes/create", createSecretScope, nil)
 	return err
 }
 
 // DeleteSecretScope deletes a secret scope
-func (a SecretsAPI) DeleteSecretScope(scope string) error {
-	data := struct {
-		Scope string `json:"scope,omitempty" url:"scope,omitempty"`
-	}{
-		scope,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/scopes/delete", data, nil)
+func (a SecretsAPI) DeleteSecretScope(deleteSecretScopeReq httpmodels.DeleteSecretScopeReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/scopes/delete", deleteSecretScopeReq, nil)
 	return err
 }
 
 // ListSecretScopes lists all secret scopes available in the workspace
-func (a SecretsAPI) ListSecretScopes() ([]models.SecretScope, error) {
-	var listSecretScopesResponse struct {
-		Scopes []models.SecretScope `json:"scopes,omitempty" url:"scopes,omitempty"`
-	}
+func (a SecretsAPI) ListSecretScopes() (httpmodels.ListSecretScopesResp, error) {
+	var listSecretScopesResp httpmodels.ListSecretScopesResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/scopes/list", nil, nil)
 	if err != nil {
-		return listSecretScopesResponse.Scopes, err
+		return listSecretScopesResp, err
 	}
 
-	err = json.Unmarshal(resp, &listSecretScopesResponse)
-	return listSecretScopesResponse.Scopes, err
+	err = json.Unmarshal(resp, &listSecretScopesResp)
+	return listSecretScopesResp, err
 }
 
 // PutSecret creates or modifies a bytes secret depends on the type of scope backend with
-func (a SecretsAPI) PutSecret(bytesValue []byte, scope, key string) error {
-	data := struct {
-		BytesValue string `json:"bytes_value,omitempty" url:"bytes_value,omitempty"`
-		Scope      string `json:"scope,omitempty" url:"scope,omitempty"`
-		Key        string `json:"key,omitempty" url:"key,omitempty"`
-	}{
-		base64.StdEncoding.EncodeToString(bytesValue),
-		scope,
-		key,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/put", data, nil)
-	return err
-}
-
-// PutSecretString creates or modifies a string secret depends on the type of scope backend
-func (a SecretsAPI) PutSecretString(stringValue, scope, key string) error {
-	data := struct {
-		StringValue string `json:"string_value,omitempty" url:"string_value,omitempty"`
-		Scope       string `json:"scope,omitempty" url:"scope,omitempty"`
-		Key         string `json:"key,omitempty" url:"key,omitempty"`
-	}{
-		stringValue,
-		scope,
-		key,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/put", data, nil)
+func (a SecretsAPI) PutSecret(putSecretReq httpmodels.PutSecretReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/put", putSecretReq, nil)
 	return err
 }
 
 // DeleteSecret deletes a secret depends on the type of scope backend
-func (a SecretsAPI) DeleteSecret(scope, key string) error {
-	data := struct {
-		Scope string `json:"scope,omitempty" url:"scope,omitempty"`
-		Key   string `json:"key,omitempty" url:"key,omitempty"`
-	}{
-		scope,
-		key,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/delete", data, nil)
+func (a SecretsAPI) DeleteSecret(deleteSecretReq httpmodels.DeleteSecretReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/delete", deleteSecretReq, nil)
 	return err
 }
 
 // ListSecrets lists the secret keys that are stored at this scope
-func (a SecretsAPI) ListSecrets(scope string) ([]models.SecretMetadata, error) {
-	var secretsList struct {
-		Secrets []models.SecretMetadata `json:"secrets,omitempty" url:"secrets,omitempty"`
-	}
+func (a SecretsAPI) ListSecrets(listSecretsReq httpmodels.ListSecretsReq) (httpmodels.ListSecretsResp, error) {
+	var listSecretsResp httpmodels.ListSecretsResp
 
-	data := struct {
-		Scope string `json:"scope,omitempty" url:"scope,omitempty"`
-	}{
-		scope,
-	}
-
-	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/list", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/list", listSecretsReq, nil)
 	if err != nil {
-		return secretsList.Secrets, err
+		return listSecretsResp, err
 	}
 
-	err = json.Unmarshal(resp, &secretsList)
-	return secretsList.Secrets, err
+	err = json.Unmarshal(resp, &listSecretsResp)
+	return listSecretsResp, err
 }
 
 // PutSecretACL creates or overwrites the ACL associated with the given principal (user or group) on the specified scope point
-func (a SecretsAPI) PutSecretACL(scope, principal string, permission models.AclPermission) error {
-	data := struct {
-		Scope      string               `json:"scope,omitempty" url:"scope,omitempty"`
-		Principal  string               `json:"principal,omitempty" url:"principal,omitempty"`
-		Permission models.AclPermission `json:"permission,omitempty" url:"permission,omitempty"`
-	}{
-		scope,
-		principal,
-		permission,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/acls/put", data, nil)
+func (a SecretsAPI) PutSecretACL(putSecretACLReq httpmodels.PutSecretACLReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/acls/put", putSecretACLReq, nil)
 	return err
 }
 
 // DeleteSecretACL deletes the given ACL on the given scope
-func (a SecretsAPI) DeleteSecretACL(scope, principal string) error {
-	data := struct {
-		Scope     string `json:"scope,omitempty" url:"scope,omitempty"`
-		Principal string `json:"principal,omitempty" url:"principal,omitempty"`
-	}{
-		scope,
-		principal,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/secrets/acls/delete", data, nil)
+func (a SecretsAPI) DeleteSecretACL(deleteSecretACLReq httpmodels.DeleteSecretACLReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/secrets/acls/delete", deleteSecretACLReq, nil)
 	return err
 }
 
 // GetSecretACL describe the details about the given ACL, such as the group and permission
-func (a SecretsAPI) GetSecretACL(scope, principal string) (models.AclItem, error) {
-	var aclItem models.AclItem
+func (a SecretsAPI) GetSecretACL(getSecretACLReq httpmodels.GetSecretACLReq) (httpmodels.GetSecretACLResp, error) {
+	var getSecretACLResp httpmodels.GetSecretACLResp
 
-	data := struct {
-		Scope     string `json:"scope,omitempty" url:"scope,omitempty"`
-		Principal string `json:"principal,omitempty" url:"principal,omitempty"`
-	}{
-		scope,
-		principal,
-	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/acls/get", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/acls/get", getSecretACLReq, nil)
 	if err != nil {
-		return aclItem, err
+		return getSecretACLResp, err
 	}
 
-	err = json.Unmarshal(resp, &aclItem)
-	return aclItem, err
+	err = json.Unmarshal(resp, &getSecretACLResp)
+	return getSecretACLResp, err
 }
 
 // ListSecretACLs lists the ACLs set on the given scope
-func (a SecretsAPI) ListSecretACLs(scope string) ([]models.AclItem, error) {
-	var aclItem struct {
-		Acls []models.AclItem `json:"acls,omitempty" url:"acls,omitempty"`
-	}
+func (a SecretsAPI) ListSecretACLs(listSecretACLsReq httpmodels.ListSecretACLsReq) (httpmodels.ListSecretACLsResp, error) {
+	var listSecretACLsResp httpmodels.ListSecretACLsResp
 
-	data := struct {
-		Scope string `json:"scope,omitempty" url:"scope,omitempty"`
-	}{
-		scope,
-	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/acls/list", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/secrets/acls/list", listSecretACLsReq, nil)
 	if err != nil {
-		return aclItem.Acls, err
+		return listSecretACLsResp, err
 	}
 
-	err = json.Unmarshal(resp, &aclItem)
-	return aclItem.Acls, err
+	err = json.Unmarshal(resp, &listSecretACLsResp)
+	return listSecretACLsResp, err
 }

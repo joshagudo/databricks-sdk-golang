@@ -30,20 +30,20 @@ jobs, err := c.Jobs().List()
 | Account API | ✗ | N/A |
 | Clusters API | ✔ (Outdated) | ✔ |
 | Cluster Policies API | ✗ | ✗ |
-| DBFS API | ✔ (Outdated) | ✔ (Outdated) |
+| DBFS API | ✔ (Outdated) | ✔ |
 | Global Init Scripts API | ✗ | ✗ |
 | Groups API | ✔ (Outdated) | ✔ |
 | Instance Pools API | ✗ | ✗ |
 | Instance Profiles API | ✔ (Outdated) | N/A |
 | IP Access List API | ✗ | ✗ |
 | Jobs API | ✔ (Outdated) | ✔ |
-| Libraries API | ✔ (Outdated) | ✔ (Outdated) |
+| Libraries API | ✔ (Outdated) | ✔ |
 | MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
-| Secrets API | ✔ (Outdated) | ✔ (Outdated) |
-| Token API | ✔ (Outdated) | ✔ (Outdated) |
+| Secrets API | ✔ (Outdated) | ✔ |
+| Token API | ✔ (Outdated) | ✔ |
 | Token Management API | ✗ | ✗ |
-| Workspace API | ✔ (Outdated) | ✔ (Outdated) |
+| Workspace API | ✔ (Outdated) | ✔ |
 
 ** SCIM and MLflow are separate systems that are planned differently.
