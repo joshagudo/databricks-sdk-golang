@@ -1,5 +1,5 @@
 package httpmodels
 
-type MakeDirsReq struct {
+type MkdirsReq struct {
 	Path string `json:"path,omitempty" url:"path,omitempty"`
 }

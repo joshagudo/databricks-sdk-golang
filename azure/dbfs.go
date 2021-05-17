@@ -1,12 +1,10 @@
 package azure
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"net/http"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/dbfs/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/dbfs/models"
 )
 
 // DbfsAPI exposes the DBFS API
@@ -31,13 +29,11 @@ func (a DbfsAPI) Close(data httpmodels.CloseReq) error {
 	return err
 }
 
-
 // Create opens a stream to write to a file and returns a handle to this stream
-func (a DbfsAPI) Create(data httpmodels.createReq) (httpmodels.CreateResp, error) {
+func (a DbfsAPI) Create(data httpmodels.CreateReq) (httpmodels.CreateResp, error) {
 	var createResponse httpmodels.CreateResp
 
 	resp, err := a.Client.performQuery(http.MethodPost, "/dbfs/create", data, nil)
-
 	if err != nil {
 		return createResponse, err
 	}
@@ -57,7 +53,6 @@ func (a DbfsAPI) GetStatus(data httpmodels.GetStatusReq) (httpmodels.GetStatusRe
 	var fileInfo httpmodels.GetStatusResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/dbfs/get-status", data, nil)
-
 	if err != nil {
 		return fileInfo, err
 	}
@@ -66,13 +61,11 @@ func (a DbfsAPI) GetStatus(data httpmodels.GetStatusReq) (httpmodels.GetStatusRe
 	return fileInfo, err
 }
 
-
 // List lists the contents of a directory, or details of the file
 func (a DbfsAPI) List(data httpmodels.ListReq) (httpmodels.ListResp, error) {
 	var listResponse httpmodels.ListResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/dbfs/list", data, nil)
-
 	if err != nil {
 		return listResponse, err
 	}
@@ -82,7 +75,7 @@ func (a DbfsAPI) List(data httpmodels.ListReq) (httpmodels.ListResp, error) {
 }
 
 // Mkdirs creates the given directory and necessary parent directories if they do not exist
-func (a DbfsAPI) Mkdirs(data httpmodels.MakeDirsReq) error {
+func (a DbfsAPI) Mkdirs(data httpmodels.MkdirsReq) error {
 	_, err := a.Client.performQuery(http.MethodPost, "/dbfs/mkdirs", data, nil)
 	return err
 }
@@ -101,21 +94,13 @@ func (a DbfsAPI) Put(data httpmodels.PutReq) error {
 
 // Read returns the contents of a file
 func (a DbfsAPI) Read(data httpmodels.ReadReq) (httpmodels.ReadResp, error) {
-	var readResponseBase64 httpmodels.ReadRespBase64
-	var readResponse DbfsReadResponse
+	var readResponse httpmodels.ReadResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/dbfs/read", data, nil)
-
 	if err != nil {
 		return readResponse, err
 	}
 
-	err = json.Unmarshal(resp, &readResponseBase64)
-	if err != nil {
-		return readResponse, err
-	}
-
-	readResponse.BytesRead = readResponseBase64.BytesRead
-	readResponse.Data, err = base64.StdEncoding.DecodeString(readResponseBase64.Data)
+	err = json.Unmarshal(resp, &readResponse)
 	return readResponse, err
 }
