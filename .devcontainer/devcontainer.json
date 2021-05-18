@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/go
 {
-	"name": "Go",
+	"name": "Databricks SDK Go",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
@@ -16,23 +16,51 @@
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash",
-		"go.toolsManagement.checkForUpdates": "local",
-		"go.useLanguageServer": true,
+		"terminal.integrated.shell.linux": "zsh",
 		"go.gopath": "/go",
-		"go.goroot": "/usr/local/go"
+		"go.useLanguageServer": true,		
+		"go.toolsManagement.checkForUpdates": "local",
+		"go.goroot": "/usr/local/go",
+		"[go]": {
+            "editor.formatOnSave": true,
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true,
+            },
+            // Optional: Disable snippets, as they conflict with completion ranking.
+            "editor.snippetSuggestions": "none",
+        },
+        "[go.mod]": {
+            "editor.formatOnSave": true,
+            "editor.codeActionsOnSave": {
+                "source.organizeImports": true,
+            },
+        },
+        "gopls": {
+            // Add parameter placeholders when completing a function.
+            "usePlaceholders": true,
+
+            // If true, enable additional analyses with staticcheck.
+            // Warning: This will significantly increase memory usage.
+            "staticcheck": false,
+        }
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"golang.Go"
+        "ms-vscode.go",
+		"golang.Go",
+        "humao.rest-client",
+        "IBM.output-colorizer",
+        "davidanson.vscode-markdownlint",
+		"eamodio.gitlens",
+		"adamhartford.vscode-base64"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "go version",
+    "postCreateCommand": "go mod download",
 
 	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
