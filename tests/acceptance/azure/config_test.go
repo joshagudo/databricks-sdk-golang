@@ -15,7 +15,6 @@ const (
 )
 
 func init() {
-
 	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
 	c = dbAzure.NewDBClient(opt)
 }
