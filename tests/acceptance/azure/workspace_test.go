@@ -7,17 +7,6 @@ import (
 )
 
 func TestAzureWorkspaceList(t *testing.T) {
-	// Initialize the test
-	// var o databricks.DBClientOption
-
-	// testConfig := GetTestConfig()
-
-	// o.Host = testConfig[DATABRICKS_HOST_KEY]
-	// o.Token = testConfig[DATABRICKS_TOKEN_KEY]
-
-	// var c dbAzure.DBClient
-	// c.Init(o)
-
 	c := GetTestDBClient()
 
 	const rootPath = "/"
@@ -35,4 +24,14 @@ func TestAzureWorkspaceList(t *testing.T) {
 	if workSpaceList.Objects[0].Path != "/Users" || workSpaceList.Objects[1].Path != "/Shared" {
 		t.Error("Default root workspaces are not /Users and /Shared")
 	}
+}
+
+func TestAzureWorkspaceImport(t *testing.T) {
+	// Initialize the test
+	c := GetTestDBClient()
+
+	// Creating object to import to workspace
+	importRequestSamples := LoadImportRequestSamples()
+
+	c.Workspace().Import(importRequestSamples["scala"])
 }
