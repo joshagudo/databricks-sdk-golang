@@ -1,4 +1,4 @@
-package azure_test
+package workspace
 
 import (
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"

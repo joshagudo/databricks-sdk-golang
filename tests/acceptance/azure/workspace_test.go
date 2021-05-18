@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
+	"github.com/polar-rams/databricks-sdk-golang/tests/acceptance/azure/workspace"
 )
 
 func TestAzureWorkspaceList(t *testing.T) {
@@ -31,7 +32,7 @@ func TestAzureWorkspaceImport(t *testing.T) {
 	c := GetTestDBClient()
 
 	// Creating object to import to workspace
-	importRequestSamples := LoadImportRequestSamples()
+	importRequestSamples := workspace.LoadImportRequestSamples()
 
 	c.Workspace().Import(importRequestSamples["scala"])
 }
