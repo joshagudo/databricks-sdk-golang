@@ -4,6 +4,10 @@ import (
 	"github.com/polar-rams/databricks-sdk-golang/azure/clusters/models"
 )
 
+type GetReq struct {
+	ClusterID string `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
+}
+
 type GetResp struct {
 	NumWorkers             int32                     `json:"num_workers,omitempty" url:"num_workers,omitempty"`
 	AutoScale              *models.AutoScale         `json:"autoscale,omitempty" url:"autoscale,omitempty"`
@@ -37,8 +41,4 @@ type GetResp struct {
 	DefaultTags            map[string]string         `json:"default_tags,omitempty" url:"default_tags,omitempty"`
 	ClusterLogStatus       *models.LogSyncStatus     `json:"cluster_log_status,omitempty" url:"cluster_log_status,omitempty"`
 	TerminationReason      *models.TerminationReason `json:"termination_reason,omitempty" url:"termination_reason,omitempty"`
-}
-
-type GetRespList struct {
-	Clusters []GetResp `json:"clusters,omitempty" url:"clusters,omitempty"`
 }
