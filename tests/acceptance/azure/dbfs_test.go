@@ -6,20 +6,16 @@ import (
 	"github.com/polar-rams/databricks-sdk-golang/azure/dbfs/httpmodels"
 )
 
-func TestDBFSList(t *testing.T) {
-	const rootPath = "/"
-
-	// Listing default workspaces
-	var lReq httpmodels.ListReq
-	listRequest.Path = rootPath
-
-	workSpaceList, e := c.Workspace().List(listRequest)
-
+func TestAzureDBFSList(t *testing.T) {
+	listRequest := httpmodels.ListReq{
+		Path: "/",
+	}
+	listResponse, e := c.Dbfs().List(listRequest)
 	if e != nil {
-		t.Error("TestAzureWorkspaceList: could not list workspaces")
+		t.Error("could not list dbfs")
 	}
 
-	if len(workSpaceList.Objects) == 0 {
-		t.Error("TestAzureWorkspaceList: Could not retrieve default workspaces")
+	if len(listResponse.Files) == 0 {
+		t.Error("could not get any files from dbfs")
 	}
 }
