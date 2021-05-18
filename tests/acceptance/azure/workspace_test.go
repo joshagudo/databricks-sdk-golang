@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/tests/acceptance/azure/workspace"
 )
 
 func TestAzureWorkspaceList(t *testing.T) {
@@ -17,17 +16,10 @@ func TestAzureWorkspaceList(t *testing.T) {
 	workSpaceList, e := c.Workspace().List(listRequest)
 
 	if e != nil {
-		t.Error("could not list workspaces")
+		t.Error("TestAzureWorkspaceList: could not list workspaces")
 	}
 
-	if workSpaceList.Objects[0].Path != "/Users" || workSpaceList.Objects[1].Path != "/Shared" {
-		t.Error("Default root workspaces are not /Users and /Shared")
+	if len(workSpaceList.Objects) == 0 {
+		t.Error("TestAzureWorkspaceList: Could not retrieve default workspaces")
 	}
-}
-
-func TestAzureWorkspaceImport(t *testing.T) {
-	// Creating object to import to workspace
-	importRequestSamples := workspace.LoadImportRequestSamples()
-
-	c.Workspace().Import(importRequestSamples["scala"])
 }
