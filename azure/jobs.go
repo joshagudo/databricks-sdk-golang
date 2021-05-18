@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/models"
 )
 
 // JobsAPI exposes Jobs API endpoints
@@ -19,191 +18,148 @@ func (a JobsAPI) init(client DBClient) JobsAPI {
 }
 
 // Create creates a new job
-func (a JobsAPI) Create(jobSettings models.JobSettings) (models.Job, error) {
-	var job models.Job
+func (a JobsAPI) Create(createRequest httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+	var createResp httpmodels.CreateResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/create", jobSettings, nil)
+	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/create", createRequest, nil)
 	if err != nil {
-		return job, err
+		return createResp, err
 	}
 
-	err = json.Unmarshal(resp, &job)
-	return job, err
+	err = json.Unmarshal(resp, &createResp)
+	return createResp, err
 }
 
 // List lists all jobs
-func (a JobsAPI) List() ([]models.Job, error) {
-	var jobsList httpmodels.JobsListResp
+func (a JobsAPI) List() (httpmodels.ListResp, error) {
+	var listResp httpmodels.ListResp
 
 	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/list", nil, nil)
 	if err != nil {
-		return jobsList.Jobs, err
+		return listResp, err
 	}
 
-	err = json.Unmarshal(resp, &jobsList)
-	return jobsList.Jobs, err
+	err = json.Unmarshal(resp, &listResp)
+	return listResp, err
 }
 
 // Delete deletes a job by ID
-func (a JobsAPI) Delete(jobID int64) error {
-	data := httpmodels.GenericJobReq{JobID: jobID}
-	_, err := a.Client.performQuery(http.MethodPost, "/jobs/delete", data, nil)
+func (a JobsAPI) Delete(deleteReq httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/jobs/delete", deleteReq, nil)
 	return err
 }
 
 // Get gets a job by ID
-func (a JobsAPI) Get(jobID int64) (models.Job, error) {
-	var job models.Job
+func (a JobsAPI) Get(getReq httpmodels.GetReq) (httpmodels.GetResp, error) {
+	var getResp httpmodels.GetResp
 
-	data := httpmodels.GenericJobReq{JobID: jobID}
-	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/get", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/get", getReq, nil)
 	if err != nil {
-		return job, err
+		return getResp, err
 	}
 
-	err = json.Unmarshal(resp, &job)
-	return job, err
+	err = json.Unmarshal(resp, &getResp)
+	return getResp, err
 }
 
 // Reset overwrites job settings
-func (a JobsAPI) Reset(jobID int64, jobSettings models.JobSettings) error {
-	data := httpmodels.GenericJobRunsUpdateReq{
-		JobID:       jobID,
-		NewSettings: jobSettings,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/jobs/reset", data, nil)
+func (a JobsAPI) Reset(resetReq httpmodels.ResetReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/jobs/reset", resetReq, nil)
 	return err
 }
 
 // Update adds, changes, or removes specific settings of an existing job
-func (a JobsAPI) Update(jobID int64, jobSettings models.JobSettings, fieldsToRemove []string) error {
-	data := httpmodels.GenericJobRunsUpdateReq{
-		JobID:          jobID,
-		NewSettings:    jobSettings,
-		FieldsToRemove: fieldsToRemove,
-	}
-	_, err := a.Client.performQuery(http.MethodPost, "/jobs/update", data, nil)
+func (a JobsAPI) Update(updateReq httpmodels.UpdateReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/jobs/update", updateReq, nil)
 	return err
 }
 
 // RunNow runs a job now and return the run_id of the triggered run
-func (a JobsAPI) RunNow(jobID int64, runParameters models.RunParameters) (models.Run, error) {
-	var run models.Run
+func (a JobsAPI) RunNow(runNowReq httpmodels.RunNowReq) (httpmodels.RunNowResp, error) {
+	var runNowResp httpmodels.RunNowResp
 
-	data := httpmodels.JobsRunNowReq{
-		JobID:         jobID,
-		RunParameters: runParameters,
-	}
-	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/run-now", data, nil)
+	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/run-now", runNowReq, nil)
 	if err != nil {
-		return run, err
+		return runNowResp, err
 	}
 
-	err = json.Unmarshal(resp, &run)
-	return run, err
+	err = json.Unmarshal(resp, &runNowResp)
+	return runNowResp, err
 }
 
 // RunsSubmit submit a one-time run
-func (a JobsAPI) RunsSubmit(runName string, clusterSpec models.ClusterSpec, jobTask models.JobTask, timeoutSeconds int32, idempotencyToken string) (models.Run, error) {
-	var run models.Run
+func (a JobsAPI) RunsSubmit(runsSubmitReq httpmodels.RunsSubmitReq) (httpmodels.RunsSubmitResp, error) {
+	var runsSubmitResp httpmodels.RunsSubmitResp
 
-	data := httpmodels.JobsRunsSubmitReq{
-		RunName:          runName,
-		ClusterSpec:      clusterSpec,
-		JobTask:          jobTask,
-		TimeoutSeconds:   timeoutSeconds,
-		IdempotencyToken: idempotencyToken,
-	}
-	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/submit", data, nil)
+	resp, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/submit", runsSubmitReq, nil)
 	if err != nil {
-		return run, err
+		return runsSubmitResp, err
 	}
 
-	err = json.Unmarshal(resp, &run)
-	return run, err
+	err = json.Unmarshal(resp, &runsSubmitResp)
+	return runsSubmitResp, err
 }
 
 // RunsList lists runs from most recently started to least
-func (a JobsAPI) RunsList(activeOnly, completedOnly bool, jobID int64, offset, limit int32, runType string) (httpmodels.JobsRunsListResp, error) {
-	var runlistResponse httpmodels.JobsRunsListResp
+func (a JobsAPI) RunsList(runsListReq httpmodels.RunsListReq) (httpmodels.RunsListResp, error) {
+	var runsListResp httpmodels.RunsListResp
 
-	data := httpmodels.JobsRunsListReq{
-		ActiveOnly:    activeOnly,
-		CompletedOnly: completedOnly,
-		JobID:         jobID,
-		Offset:        offset,
-		Limit:         limit,
-		RunType:       runType,
-	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/list", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/list", runsListReq, nil)
 	if err != nil {
-		return runlistResponse, err
+		return runsListResp, err
 	}
 
-	err = json.Unmarshal(resp, &runlistResponse)
-	return runlistResponse, err
+	err = json.Unmarshal(resp, &runsListResp)
+	return runsListResp, err
 }
 
 // RunsGet retrieve the metadata of a run
-func (a JobsAPI) RunsGet(runID int64) (models.Run, error) {
-	var run models.Run
+func (a JobsAPI) RunsGet(runsGetReq httpmodels.RunsGetReq) (httpmodels.RunsGetResp, error) {
+	var runsGetResp httpmodels.RunsGetResp
 
-	data := httpmodels.GenericRunReq{RunID: runID}
-	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/get", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/get", runsGetReq, nil)
 	if err != nil {
-		return run, err
+		return runsGetResp, err
 	}
 
-	err = json.Unmarshal(resp, &run)
-	return run, err
+	err = json.Unmarshal(resp, &runsGetResp)
+	return runsGetResp, err
 }
 
 // RunsExport exports and retrieve the job run task
-func (a JobsAPI) RunsExport(runID int64, viewsToExport models.ViewsToExport) ([]models.ViewItem, error) {
-	var viewItemsView = struct {
-		Views []models.ViewItem `json:"views,omitempty" url:"views,omitempty"`
-	}{}
+func (a JobsAPI) RunsExport(runsExportReq httpmodels.RunsExportReq) (httpmodels.RunsExportResp, error) {
+	var runsExportResp httpmodels.RunsExportResp
 
-	data := struct {
-		RunID         int64                `json:"run_id,omitempty" url:"run_id,omitempty"`
-		ViewsToExport models.ViewsToExport `json:"views_to_export,omitempty" url:"views_to_export,omitempty"`
-	}{
-		runID,
-		viewsToExport,
-	}
-	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/export", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/export", runsExportReq, nil)
 	if err != nil {
-		return viewItemsView.Views, err
+		return runsExportResp, err
 	}
 
-	err = json.Unmarshal(resp, &viewItemsView)
-	return viewItemsView.Views, err
+	err = json.Unmarshal(resp, &runsExportResp)
+	return runsExportResp, err
 }
 
 // RunsCancel cancels a run
-func (a JobsAPI) RunsCancel(runID int64) error {
-	data := httpmodels.GenericRunReq{RunID: runID}
-	_, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/cancel", data, nil)
+func (a JobsAPI) RunsCancel(runsCancelReq httpmodels.RunsCancelReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/cancel", runsCancelReq, nil)
 	return err
 }
 
 // RunsGetOutput retrieves the output of a run
-func (a JobsAPI) RunsGetOutput(runID int64) (httpmodels.JobsRunsGetOutputResp, error) {
-	var runsGetOutputResponse httpmodels.JobsRunsGetOutputResp
+func (a JobsAPI) RunsGetOutput(runsGetOutputReq httpmodels.RunsGetOutputReq) (httpmodels.RunsGetOutputResp, error) {
+	var runsGetOutputResp httpmodels.RunsGetOutputResp
 
-	data := httpmodels.GenericRunReq{RunID: runID}
-	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/get-output", data, nil)
+	resp, err := a.Client.performQuery(http.MethodGet, "/jobs/runs/get-output", runsGetOutputReq, nil)
 	if err != nil {
-		return runsGetOutputResponse, err
+		return runsGetOutputResp, err
 	}
 
-	err = json.Unmarshal(resp, &runsGetOutputResponse)
-	return runsGetOutputResponse, err
+	err = json.Unmarshal(resp, &runsGetOutputResp)
+	return runsGetOutputResp, err
 }
 
 // RunsDelete deletes a non-active run. Returns an error if the run is active.
-func (a JobsAPI) RunsDelete(runID int64) error {
-	data := httpmodels.GenericRunReq{RunID: runID}
-	_, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/delete", data, nil)
+func (a JobsAPI) RunsDelete(runsDeleteReq httpmodels.RunsDeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/jobs/runs/delete", runsDeleteReq, nil)
 	return err
 }
