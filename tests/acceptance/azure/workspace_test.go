@@ -23,7 +23,6 @@ func TestAzureWorkspaceList(t *testing.T) {
 	}
 	workSpaceList, e := c.Workspace().List(listRequest)
 	assert.Nil(t, e, "could not list workspaces")
-	// fmt.Printf("something %s", &workSpaceList.Objects)
 	assert.NotEqual(t, len(*workSpaceList.Objects), 0, "No workspaces found in root path")
 }
 
