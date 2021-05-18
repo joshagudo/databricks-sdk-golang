@@ -113,6 +113,23 @@ func TestAzureWorkspaceGetStatus(t *testing.T) {
 	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", importRequestScala.Language))
 }
 
+func TestAzureWorkspaceMkdirs(t *testing.T) {
+	// import and assert
+	samplePath := fmt.Sprintf("/samplenotebook-%s", randSeq(5))
+	mkdirsRequest := httpmodels.MkdirsReq{
+		Path: samplePath,
+	}
+
+	assert.Nil(t, c.Workspace().Mkdirs(mkdirsRequest), fmt.Sprintf("could not mkdir: %s", samplePath))
+
+	// delete and assert
+	deleteRequest := httpmodels.DeleteReq{
+		Path:      samplePath,
+		Recursive: true,
+	}
+	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", samplePath))
+}
+
 func randSeq(n int) string {
 	rand.Seed(time.Now().UnixNano())
 	b := make([]rune, n)
