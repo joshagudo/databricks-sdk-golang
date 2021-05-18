@@ -1,49 +1,38 @@
 package azure_test
 
 import (
-	"log"
-	"os"
 	"testing"
 
 	databricks "github.com/polar-rams/databricks-sdk-golang"
 	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
-	// "github.com/onsi/gomega"
+	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
 )
 
 func TestAzureListWorkspace(t *testing.T) {
+	// Initialize the test
 	var o databricks.DBClientOption
-	o.Host = os.Getenv("DATABRICKS_HOST")
-	o.Token = os.Getenv("DATABRICKS_TOKEN")
+
+	testConfig := GetTestConfig()
+
+	o.Host = testConfig[DATABRICKS_HOST_KEY]
+	o.Token = testConfig[DATABRICKS_TOKEN_KEY]
 
 	var c dbAzure.DBClient
 	c.Init(o)
 
-	wss, e := c.Workspace().List("/")
+	const rootPath = "/"
+
+	// Listing default workspaces
+	var listRequest httpmodels.ListReq
+	listRequest.Path = rootPath
+
+	workSpaceList, e := c.Workspace().List(listRequest)
 
 	if e != nil {
-		log.Printf("Error: %s", e)
+		t.Error("could not list workspaces")
 	}
 
-	if wss[0].Path != "/Users" || wss[1].Path != "/Shared" {
-		t.Error("Default root workspaces are not /Users and /Shared")
-	}
-}
-
-func TestAzureImportWorkspace(t *testing.T) {
-	var o databricks.DBClientOption
-	o.Host = os.Getenv("DATABRICKS_HOST")
-	o.Token = os.Getenv("DATABRICKS_TOKEN")
-
-	var c dbAzure.DBClient
-	c.Init(o)
-
-	wss, e := c.Workspace().List("/")
-
-	if e != nil {
-		log.Printf("Error: %s", e)
-	}
-
-	if wss[0].Path != "/Users" || wss[1].Path != "/Shared" {
+	if workSpaceList.Objects[0].Path != "/Users" || workSpaceList.Objects[1].Path != "/Shared" {
 		t.Error("Default root workspaces are not /Users and /Shared")
 	}
 }
