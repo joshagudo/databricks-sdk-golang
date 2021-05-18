@@ -7,9 +7,9 @@ type DBClient struct {
 	Option databricks.DBClientOption
 }
 
-func NewDBClient(option databricks.DBClientOption) *DBClient {
+func NewDBClient(option *databricks.DBClientOption) *DBClient {
 	return &DBClient{
-		Option: option,
+		Option: *option,
 	}
 }
 

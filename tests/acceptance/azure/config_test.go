@@ -8,7 +8,7 @@ import (
 )
 
 var testConfig map[string]string
-var c dbAzure.DBClient
+var c *dbAzure.DBClient
 
 const (
 	DATABRICKS_HOST_KEY  = "DATABRICKS_HOST"
@@ -18,12 +18,12 @@ const (
 func init() {
 	testConfig = make(map[string]string)
 
-	var o databricks.DBClientOption
-	o.Host = os.Getenv(DATABRICKS_HOST_KEY)
-	o.Token = os.Getenv(DATABRICKS_TOKEN_KEY)
-	c.Init(o)
+	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
+	c = dbAzure.NewDBClient(opt)
+
+	// c
 }
 
-func GetTestDBClient() *dbAzure.DBClient {
-	return &c
-}
+// func GetTestDBClient() *dbAzure.DBClient {
+// 	return &c
+// }

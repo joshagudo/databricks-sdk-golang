@@ -8,8 +8,6 @@ import (
 )
 
 func TestAzureWorkspaceList(t *testing.T) {
-	c := GetTestDBClient()
-
 	const rootPath = "/"
 
 	// Listing default workspaces
@@ -28,9 +26,6 @@ func TestAzureWorkspaceList(t *testing.T) {
 }
 
 func TestAzureWorkspaceImport(t *testing.T) {
-	// Initialize the test
-	c := GetTestDBClient()
-
 	// Creating object to import to workspace
 	importRequestSamples := workspace.LoadImportRequestSamples()
 
