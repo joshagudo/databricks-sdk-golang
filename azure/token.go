@@ -18,33 +18,33 @@ func (a TokenAPI) init(client DBClient) TokenAPI {
 }
 
 // Create creates and return a token
-func (a SecretsAPI) Create(request httpmodels.CreateReq) (httpmodels.CreateResp, error) {
-	var createResponse httpmodels.CreateResp
+func (a SecretsAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+	var resp httpmodels.CreateResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/token/create", request, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodPost, "/token/create", req, nil)
 	if err != nil {
-		return createResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &createResponse)
-	return createResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // List lists all the valid tokens for a user-workspace pair
 func (a SecretsAPI) List() (httpmodels.ListResp, error) {
-	var listResponse httpmodels.ListResp
+	var resp httpmodels.ListResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/token/list", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/token/list", nil, nil)
 	if err != nil {
-		return listResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listResponse)
-	return listResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // Revoke revokes an access token
-func (a SecretsAPI) Revoke(request httpmodels.DeleteReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/token/delete", request, nil)
+func (a SecretsAPI) Revoke(req httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/token/delete", req, nil)
 	return err
 }

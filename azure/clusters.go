@@ -18,81 +18,81 @@ func (a ClustersAPI) init(client DBClient) ClustersAPI {
 }
 
 // Create creates a new Spark cluster
-func (a ClustersAPI) Create(cluster httpmodels.CreateReq) (httpmodels.CreateResp, error) {
-	var createResp httpmodels.CreateResp
+func (a ClustersAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+	var resp httpmodels.CreateResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/clusters/create", cluster, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodPost, "/clusters/create", req, nil)
 	if err != nil {
-		return createResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &createResp)
-	return createResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // Edit edits the configuration of a cluster to match the provided attributes and size
-func (a ClustersAPI) Edit(editReq httpmodels.EditReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/edit", editReq, nil)
+func (a ClustersAPI) Edit(req httpmodels.EditReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/edit", req, nil)
 	return err
 }
 
 // Start starts a terminated Spark cluster given its ID
-func (a ClustersAPI) Start(startReq httpmodels.StartReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/start", startReq, nil)
+func (a ClustersAPI) Start(req httpmodels.StartReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/start", req, nil)
 	return err
 }
 
 // Restart restart a Spark cluster given its ID. If the cluster is not in a RUNNING state, nothing will happen.
-func (a ClustersAPI) Restart(restartReq httpmodels.RestartReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/restart", restartReq, nil)
+func (a ClustersAPI) Restart(req httpmodels.RestartReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/restart", req, nil)
 	return err
 }
 
 // Resize resizes a cluster to have a desired number of workers. This will fail unless the cluster is in a RUNNING state.
-func (a ClustersAPI) Resize(resizeReq httpmodels.ResizeReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/resize", resizeReq, nil)
+func (a ClustersAPI) Resize(req httpmodels.ResizeReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/resize", req, nil)
 	return err
 }
 
 // Delete terminates a Spark cluster given its ID
-func (a ClustersAPI) Delete(deleteReq httpmodels.DeleteReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/delete", deleteReq, nil)
+func (a ClustersAPI) Delete(req httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/delete", req, nil)
 	return err
 }
 
 // Terminate is an alias of Delete
-func (a ClustersAPI) Terminate(deleteReq httpmodels.DeleteReq) error {
-	return a.Delete(deleteReq)
+func (a ClustersAPI) Terminate(req httpmodels.DeleteReq) error {
+	return a.Delete(req)
 }
 
 // PermanentDelete permanently delete a cluster
-func (a ClustersAPI) PermanentDelete(permDelReq httpmodels.PermanentDeleteReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/permanent-delete", permDelReq, nil)
+func (a ClustersAPI) PermanentDelete(req httpmodels.PermanentDeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/permanent-delete", req, nil)
 	return err
 }
 
 // Get retrieves the information for a cluster given its identifier
-func (a ClustersAPI) Get(getReq httpmodels.GetReq) (httpmodels.GetResp, error) {
-	var clusterInfo httpmodels.GetResp
+func (a ClustersAPI) Get(req httpmodels.GetReq) (httpmodels.GetResp, error) {
+	var resp httpmodels.GetResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/clusters/get", getReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/clusters/get", req, nil)
 	if err != nil {
-		return clusterInfo, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &clusterInfo)
-	return clusterInfo, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // Pin ensure that an interactive cluster configuration is retained even after a cluster has been terminated for more than 30 days
-func (a ClustersAPI) Pin(pinReq httpmodels.PinReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/pin", pinReq, nil)
+func (a ClustersAPI) Pin(req httpmodels.PinReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/pin", req, nil)
 	return err
 }
 
 // Unpin allows the cluster to eventually be removed from the list returned by the List API
-func (a ClustersAPI) Unpin(unpinReq httpmodels.UnpinReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/clusters/unpin", unpinReq, nil)
+func (a ClustersAPI) Unpin(req httpmodels.UnpinReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/clusters/unpin", req, nil)
 	return err
 }
 
@@ -100,52 +100,52 @@ func (a ClustersAPI) Unpin(unpinReq httpmodels.UnpinReq) error {
 // up to 70 of the most recently terminated interactive clusters in the past 30 days,
 // and up to 30 of the most recently terminated job clusters in the past 30 days
 func (a ClustersAPI) List() (httpmodels.ListResp, error) {
-	var listResp httpmodels.ListResp
+	var resp httpmodels.ListResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/clusters/list", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/clusters/list", nil, nil)
 	if err != nil {
-		return listResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listResp)
-	return listResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // ListNodeTypes returns a list of supported Spark node types
 func (a ClustersAPI) ListNodeTypes() (httpmodels.ListNodeTypesResp, error) {
-	var listNodeTypesResp httpmodels.ListNodeTypesResp
+	var resp httpmodels.ListNodeTypesResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/clusters/list-node-types", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/clusters/list-node-types", nil, nil)
 	if err != nil {
-		return listNodeTypesResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listNodeTypesResp)
-	return listNodeTypesResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // RuntimeVersions return the list of available Runtime versions
 func (a ClustersAPI) RuntimeVersions() (httpmodels.RuntimeVersionsResp, error) {
-	var runtimeVersionsResp httpmodels.RuntimeVersionsResp
+	var resp httpmodels.RuntimeVersionsResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/clusters/spark-versions", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/clusters/spark-versions", nil, nil)
 	if err != nil {
-		return runtimeVersionsResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &runtimeVersionsResp)
-	return runtimeVersionsResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // Events retrieves a list of events about the activity of a cluster
-func (a ClustersAPI) Events(eventReq httpmodels.EventsReq) (httpmodels.EventsResp, error) {
-	var eventsResponse httpmodels.EventsResp
+func (a ClustersAPI) Events(req httpmodels.EventsReq) (httpmodels.EventsResp, error) {
+	var resp httpmodels.EventsResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/clusters/events", eventReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodPost, "/clusters/events", req, nil)
 	if err != nil {
-		return eventsResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &eventsResponse)
-	return eventsResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
