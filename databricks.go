@@ -21,18 +21,27 @@ type DBClientOption struct {
 	client             http.Client
 }
 
-// Init initializes the client
-func (o *DBClientOption) Init() {
-	if o.TimeoutSeconds == 0 {
-		o.TimeoutSeconds = 10
+// NewDBClientOption retruns the new DBClientOption
+func NewDBClientOption(user, password, host, token string, defaultHeaders map[string]string, insecureSkipVerify bool, timeoutSeconds int) *DBClientOption {
+	if timeoutSeconds == 0 {
+		timeoutSeconds = 10
 	}
-	o.client = http.Client{
-		Timeout: time.Duration(time.Duration(o.TimeoutSeconds) * time.Second),
+	client := http.Client{
+		Timeout: time.Duration(time.Duration(timeoutSeconds) * time.Second),
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
-				InsecureSkipVerify: o.InsecureSkipVerify,
+				InsecureSkipVerify: insecureSkipVerify,
 			},
 		},
+	}
+	return &DBClientOption{
+		User:               user,
+		Password:           password,
+		Host:               host,
+		Token:              token,
+		DefaultHeaders:     defaultHeaders,
+		InsecureSkipVerify: insecureSkipVerify,
+		client:             client,
 	}
 }
 
