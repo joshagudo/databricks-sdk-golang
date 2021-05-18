@@ -50,12 +50,6 @@ func (c DBClient) Libraries() LibrariesAPI {
 	return libraries.init(c)
 }
 
-// Scim returns an instance of ScimAPI
-func (c DBClient) Scim() ScimAPI {
-	var scimAPI ScimAPI
-	return scimAPI.init(c)
-}
-
 // Secrets returns an instance of SecretsAPI
 func (c DBClient) Secrets() SecretsAPI {
 	var secretsAPI SecretsAPI
