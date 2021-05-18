@@ -51,5 +51,4 @@ func TestAzureJobsJob(t *testing.T) {
 }
 
 func TestAzureJobsRun(t *testing.T) {
-	j := c.Jobs()
 }
