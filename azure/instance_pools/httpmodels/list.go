@@ -6,5 +6,5 @@ import (
 
 //ListResp is to compose the response to list an array of instance pools' stats
 type ListResp struct {
-	InstancePools []models.InstancePoolStats `json:"instance_pools,omitempty" url:"instance_pools,omitempty"`
+	InstancePools *[]models.InstancePoolStats `json:"instance_pools,omitempty" url:"instance_pools,omitempty"`
 }

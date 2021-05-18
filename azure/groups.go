@@ -18,61 +18,61 @@ func (a GroupsAPI) init(client DBClient) GroupsAPI {
 }
 
 // AddMember adds a user or group to a group
-func (a GroupsAPI) AddMember(addMemberReq httpmodels.AddMemberReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/groups/add-member", addMemberReq, nil)
+func (a GroupsAPI) AddMember(req httpmodels.AddMemberReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/groups/add-member", req, nil)
 	return err
 }
 
 // Create creates a new group with the given name
-func (a GroupsAPI) Create(createReq httpmodels.CreateReq) (httpmodels.CreateResp, error) {
-	var createResponse httpmodels.CreateResp
+func (a GroupsAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+	var resp httpmodels.CreateResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/groups/create", createReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodPost, "/groups/create", req, nil)
 	if err != nil {
-		return createResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &createResponse)
-	return createResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // ListMembers returns all of the members of a particular group
-func (a GroupsAPI) ListMembers(listMembersReq httpmodels.ListMembersReq) (httpmodels.ListMembersResp, error) {
-	var listMembersResp httpmodels.ListMembersResp
+func (a GroupsAPI) ListMembers(req httpmodels.ListMembersReq) (httpmodels.ListMembersResp, error) {
+	var resp httpmodels.ListMembersResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list-members", listMembersReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/groups/list-members", req, nil)
 	if err != nil {
-		return listMembersResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listMembersResp)
-	return listMembersResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // List returns all of the groups in an organization
 func (a GroupsAPI) List() (httpmodels.ListResp, error) {
-	var listResponse httpmodels.ListResp
+	var resp httpmodels.ListResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/groups/list", nil, nil)
 	if err != nil {
-		return listResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listResponse)
-	return listResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // ListParents retrieves all groups in which a given user or group is a member
 func (a GroupsAPI) ListParents(listParentsReq httpmodels.ListParentsReq) (httpmodels.ListParentsResp, error) {
-	var listParentsResponse httpmodels.ListParentsResp
+	var resp httpmodels.ListParentsResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/groups/list-parents", listParentsReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/groups/list-parents", listParentsReq, nil)
 	if err != nil {
-		return listParentsResponse, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listParentsResponse)
-	return listParentsResponse, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // RemoveMember removes a user or group from a group

@@ -18,52 +18,52 @@ func (a InstancePoolsAPI) init(client DBClient) InstancePoolsAPI {
 }
 
 // Create creates an instance pool
-func (a InstancePoolsAPI) Create(instancePool httpmodels.CreateReq) (httpmodels.CreateResp, error) {
-	var createResp httpmodels.CreateResp
+func (a InstancePoolsAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+	var resp httpmodels.CreateResp
 
-	resp, err := a.Client.performQuery(http.MethodPost, "/instance-pools/create", instancePool, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodPost, "/instance-pools/create", req, nil)
 	if err != nil {
-		return createResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &createResp)
-	return createResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // Edit modifies the configuration of an existing instance pool.
-func (a InstancePoolsAPI) Edit(editReq httpmodels.EditReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/edit", editReq, nil)
+func (a InstancePoolsAPI) Edit(req httpmodels.EditReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/edit", req, nil)
 	return err
 }
 
 // Delete permanently deletes the instance pool.
-func (a InstancePoolsAPI) Delete(deleteReq httpmodels.DeleteReq) error {
-	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/delete", deleteReq, nil)
+func (a InstancePoolsAPI) Delete(req httpmodels.DeleteReq) error {
+	_, err := a.Client.performQuery(http.MethodPost, "/instance-pools/delete", req, nil)
 	return err
 }
 
 // Get retrieves the information for an instance pool given its identifier.
-func (a InstancePoolsAPI) Get(getReq httpmodels.GetReq) (httpmodels.GetResp, error) {
-	var getResp httpmodels.GetResp
+func (a InstancePoolsAPI) Get(req httpmodels.GetReq) (httpmodels.GetResp, error) {
+	var resp httpmodels.GetResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/get", getReq, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/get", req, nil)
 	if err != nil {
-		return getResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &getResp)
-	return getResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }
 
 // List returns information for all instance pools.
 func (a InstancePoolsAPI) List() (httpmodels.ListResp, error) {
-	var listResp httpmodels.ListResp
+	var resp httpmodels.ListResp
 
-	resp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/list", nil, nil)
+	jsonResp, err := a.Client.performQuery(http.MethodGet, "/instance-pools/list", nil, nil)
 	if err != nil {
-		return listResp, err
+		return resp, err
 	}
 
-	err = json.Unmarshal(resp, &listResp)
-	return listResp, err
+	err = json.Unmarshal(jsonResp, &resp)
+	return resp, err
 }

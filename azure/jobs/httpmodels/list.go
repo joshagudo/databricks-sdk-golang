@@ -5,5 +5,5 @@ import (
 )
 
 type ListResp struct {
-	Jobs []models.Job `json:"jobs,omitempty" url:"jobs,omitempty"`
+	Jobs *[]models.Job `json:"jobs,omitempty" url:"jobs,omitempty"`
 }
