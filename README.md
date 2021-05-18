@@ -13,12 +13,8 @@ import (
   // dbAws "github.com/polar-rams/databricks-sdk-golang/aws"
 )
 
-var o databricks.DBClientOption
-o.Host = os.Getenv("DATABRICKS_HOST")
-o.Token = os.Getenv("DATABRICKS_TOKEN")
-
-var c dbAzure.DBClient
-c.Init(o)
+opt := databricks.NewDBClientOption("", "", os.Getenv("DATABRICKS_HOST"), os.Getenv("DATABRICKS_TOKEN"))
+c := dbAzure.NewDBClient(opt)
 
 jobs, err := c.Jobs().List()
 ```
