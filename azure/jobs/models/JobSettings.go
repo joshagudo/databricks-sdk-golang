@@ -6,7 +6,7 @@ import (
 
 type JobSettings struct {
 	ExistingClusterID      string                  `json:"existing_cluster_id,omitempty" url:"existing_cluster_id,omitempty"`
-	NewCluster             NewCluster              `json:"new_cluster,omitempty" url:"new_cluster,omitempty"`
+	NewCluster             *NewCluster             `json:"new_cluster,omitempty" url:"new_cluster,omitempty"`
 	NotebookTask           *NotebookTask           `json:"notebook_task,omitempty" url:"notebook_task,omitempty"`
 	SparkJarTask           *SparkJarTask           `json:"spark_jar_task,omitempty" url:"spark_jar_task,omitempty"`
 	SparkPythonTask        *SparkPythonTask        `json:"spark_python_task,omitempty" url:"spark_python_task,omitempty"`
