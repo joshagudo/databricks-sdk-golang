@@ -12,11 +12,11 @@
       "program": "${workspaceFolder}/tests/acceptance/azure",
       "args": [
         "-test.run",
-        "TestAzureListWorkspace"
+        "TestAzure****"
       ],
       "env": {
-        "DATABRICKS_HOST": "https://adb-5329137022525358.18.azuredatabricks.net",
-        "DATABRICKS_TOKEN": "xxxx"
+        "DATABRICKS_HOST": "https://xxxx.azuredatabricks.net",
+        "DATABRICKS_TOKEN": "xxx"
       }
     }
   ]

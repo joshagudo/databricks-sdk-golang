@@ -1,8 +1,14 @@
 package azure_test
 
-import "os"
+import (
+	"os"
+
+	databricks "github.com/polar-rams/databricks-sdk-golang"
+	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
+)
 
 var testConfig map[string]string
+var c dbAzure.DBClient
 
 const (
 	DATABRICKS_HOST_KEY  = "DATABRICKS_HOST"
@@ -11,10 +17,13 @@ const (
 
 func init() {
 	testConfig = make(map[string]string)
-	testConfig[DATABRICKS_HOST_KEY] = os.Getenv(DATABRICKS_HOST_KEY)
-	testConfig[DATABRICKS_TOKEN_KEY] = os.Getenv(DATABRICKS_TOKEN_KEY)
+
+	var o databricks.DBClientOption
+	o.Host = os.Getenv(DATABRICKS_HOST_KEY)
+	o.Token = os.Getenv(DATABRICKS_TOKEN_KEY)
+	c.Init(o)
 }
 
-func GetTestConfig() map[string]string {
-	return testConfig
+func GetTestDBClient() *dbAzure.DBClient {
+	return &c
 }

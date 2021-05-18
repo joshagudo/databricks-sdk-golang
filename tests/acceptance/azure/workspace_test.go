@@ -3,22 +3,22 @@ package azure_test
 import (
 	"testing"
 
-	databricks "github.com/polar-rams/databricks-sdk-golang"
-	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
 )
 
-func TestAzureListWorkspace(t *testing.T) {
+func TestAzureWorkspaceList(t *testing.T) {
 	// Initialize the test
-	var o databricks.DBClientOption
+	// var o databricks.DBClientOption
 
-	testConfig := GetTestConfig()
+	// testConfig := GetTestConfig()
 
-	o.Host = testConfig[DATABRICKS_HOST_KEY]
-	o.Token = testConfig[DATABRICKS_TOKEN_KEY]
+	// o.Host = testConfig[DATABRICKS_HOST_KEY]
+	// o.Token = testConfig[DATABRICKS_TOKEN_KEY]
 
-	var c dbAzure.DBClient
-	c.Init(o)
+	// var c dbAzure.DBClient
+	// c.Init(o)
+
+	c := GetTestDBClient()
 
 	const rootPath = "/"
 
