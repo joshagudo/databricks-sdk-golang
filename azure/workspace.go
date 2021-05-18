@@ -32,7 +32,7 @@ func (a WorkspaceAPI) Export(exportReq httpmodels.ExportReq) (httpmodels.ExportR
 		return exportResp, err
 	}
 
-	err = json.Unmarshal(resp, &exportReq)
+	err = json.Unmarshal(resp, &exportResp)
 	return exportResp, err
 }
 
