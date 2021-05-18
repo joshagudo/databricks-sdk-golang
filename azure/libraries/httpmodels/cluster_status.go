@@ -7,6 +7,6 @@ type ClusterStatusReq struct {
 }
 
 type ClusterStatusResp struct {
-	ClusterID      string                     `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
-	LibraryStatues []models.LibraryFullStatus `json:"library_statuses,omitempty" url:"library_statuses,omitempty"`
+	ClusterID      string                      `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`
+	LibraryStatues *[]models.LibraryFullStatus `json:"library_statuses,omitempty" url:"library_statuses,omitempty"`
 }

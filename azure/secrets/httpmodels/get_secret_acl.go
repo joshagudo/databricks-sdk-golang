@@ -8,6 +8,6 @@ type GetSecretACLReq struct {
 }
 
 type GetSecretACLResp struct {
-	Principal  string                `json:"principal,omitempty" url:"principal,omitempty"`
-	Permission *models.ACLPermission `json:"permission,omitempty" url:"permission,omitempty"`
+	Principal  string               `json:"principal,omitempty" url:"principal,omitempty"`
+	Permission models.ACLPermission `json:"permission,omitempty" url:"permission,omitempty"`
 }

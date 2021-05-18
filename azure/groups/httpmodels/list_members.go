@@ -7,5 +7,5 @@ type ListMembersReq struct {
 }
 
 type ListMembersResp struct {
-	Members []models.PrincipalName `json:"members,omitempty" url:"members,omitempty"`
+	Members *[]models.PrincipalName `json:"members,omitempty" url:"members,omitempty"`
 }

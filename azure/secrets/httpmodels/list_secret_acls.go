@@ -7,5 +7,5 @@ type ListSecretACLsReq struct {
 }
 
 type ListSecretACLsResp struct {
-	Items *models.ACLItem `json:"items,omitempty" url:"items,omitempty"`
+	Items models.ACLItem `json:"items,omitempty" url:"items,omitempty"`
 }
