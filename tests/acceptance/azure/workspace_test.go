@@ -3,10 +3,8 @@ package azure_test
 import (
 	"encoding/base64"
 	"fmt"
-	"math/rand"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
@@ -81,13 +79,4 @@ func TestAzureWorkspaceExport(t *testing.T) {
 		Recursive: true,
 	}
 	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", importRequestPython.Language))
-}
-
-func randSeq(n int) string {
-	rand.Seed(time.Now().UnixNano())
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-	return string(b)
 }
