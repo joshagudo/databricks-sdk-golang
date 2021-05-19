@@ -7,5 +7,5 @@ type ListSecretsReq struct {
 }
 
 type ListSecretsResp struct {
-	Secrets *models.SecretMetadata `json:"secrets,omitempty" url:"secrets,omitempty"`
+	Secrets []models.SecretMetadata `json:"secrets,omitempty" url:"secrets,omitempty"`
 }

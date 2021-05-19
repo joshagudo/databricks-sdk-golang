@@ -9,5 +9,5 @@ type ListReq struct {
 }
 
 type ListResp struct {
-	Objects []models.ObjectInfo `json:"objects,omitempty" url:"objects,omitempty"`
+	Objects *[]models.ObjectInfo `json:"objects,omitempty" url:"objects,omitempty"`
 }

@@ -1,13 +1,15 @@
 package azure_test
 
 import (
+	"math/rand"
 	"os"
+	"time"
 
+	"github.com/joho/godotenv"
 	databricks "github.com/polar-rams/databricks-sdk-golang"
 	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
 )
 
-var testConfig map[string]string
 var c *dbAzure.DBClient
 
 const (
@@ -16,8 +18,22 @@ const (
 )
 
 func init() {
-	testConfig = make(map[string]string)
+	_, hostSet := os.LookupEnv(DATABRICKS_HOST_KEY)
+	_, tokenSet := os.LookupEnv(DATABRICKS_TOKEN_KEY)
+
+	if !hostSet || !tokenSet {
+		godotenv.Load()
+	}
 
 	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
 	c = dbAzure.NewDBClient(opt)
+}
+
+func randSeq(n int) string {
+	rand.Seed(time.Now().UnixNano())
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }

@@ -14,6 +14,6 @@ type RunsListReq struct {
 }
 
 type RunsListResp struct {
-	Runs    []models.Run `json:"runs,omitempty" url:"runs,omitempty"`
-	HasMore bool         `json:"has_more,omitempty" url:"has_more,omitempty"`
+	Runs    *[]models.Run `json:"runs,omitempty" url:"runs,omitempty"`
+	HasMore bool          `json:"has_more,omitempty" url:"has_more,omitempty"`
 }
