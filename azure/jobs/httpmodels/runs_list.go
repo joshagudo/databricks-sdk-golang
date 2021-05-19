@@ -8,8 +8,8 @@ type RunsListReq struct {
 	ActiveOnly    bool   `json:"active_only,omitempty" url:"active_only,omitempty"`
 	CompletedOnly bool   `json:"completed_only,omitempty" url:"completed_only,omitempty"`
 	JobID         int64  `json:"job_id,omitempty" url:"job_id,omitempty"`
-	Offset        int32  `json:"offset,omitempty" url:"offset,omitempty"`
-	Limit         int32  `json:"limit,omitempty" url:"limit,omitempty"`
+	Offset        int32  `json:"offset,omitempty" url:"offset"`
+	Limit         int32  `json:"limit,omitempty" url:"limit"`
 	RunType       string `json:"run_type,omitempty" url:"run_type,omitempty"`
 }
 

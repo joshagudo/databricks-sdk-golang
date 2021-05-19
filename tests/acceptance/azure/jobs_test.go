@@ -13,7 +13,7 @@ import (
 
 var testJobNotebookPath = "/ScalaExampleNotebook"
 
-func beforeTestAzureJobsJob(t *testing.T) {
+func beforeTestAzureJobsJobs(t *testing.T) {
 	importReq := workspaceHTTPModels.ImportReq{
 		Content:   "MSsx\n",
 		Path:      testJobNotebookPath,
@@ -26,7 +26,7 @@ func beforeTestAzureJobsJob(t *testing.T) {
 }
 
 func TestAzureJobsJobs(t *testing.T) {
-	beforeTestAzureJobsJob(t)
+	beforeTestAzureJobsJobs(t)
 
 	jobName := "my-test-job-name"
 
@@ -114,5 +114,113 @@ func TestAzureJobsJobs(t *testing.T) {
 	assert.Contains(t, err.Error(), "does not exist")
 }
 
+func beforeTestAzureJobsRuns(t *testing.T) int64 {
+	beforeTestAzureJobsJobs(t)
+
+	createJobReq := httpmodels.CreateReq{
+		Name: "my-test-job-name",
+		NewCluster: &models.NewCluster{
+			SparkVersion: "7.3.x-scala2.12",
+			NodeTypeID:   "Standard_D3_v2",
+			NumWorkers:   1,
+		},
+		NotebookTask: &models.NotebookTask{
+			NotebookPath: testJobNotebookPath,
+		},
+		MaxRetries: 1,
+	}
+	createJobResp, err := c.Jobs().Create(createJobReq)
+	assert.Nil(t, err)
+	time.Sleep(1 * time.Second)
+
+	return createJobResp.JobID
+}
+
+func afterTestAzureJobsRuns(t *testing.T, jobID int64) {
+	deleteJobReq := httpmodels.DeleteReq{
+		JobID: jobID,
+	}
+	err := c.Jobs().Delete(deleteJobReq)
+	assert.Nil(t, err)
+	time.Sleep(1 * time.Second)
+}
+
 func TestAzureJobsRuns(t *testing.T) {
+	jobID := beforeTestAzureJobsRuns(t)
+
+	// Run Now
+	runNowReq := httpmodels.RunNowReq{
+		JobID: jobID,
+	}
+	runNowResp, err := c.Jobs().RunNow(runNowReq)
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, runNowResp.NumberInJob, int64(1))
+	assert.GreaterOrEqual(t, runNowResp.RunID, int64(1))
+	time.Sleep(1 * time.Second)
+
+	// Runs List
+	runsListReq := httpmodels.RunsListReq{
+		JobID:         jobID,
+		ActiveOnly:    false,
+		CompletedOnly: false,
+		Offset:        0,
+		Limit:         10,
+	}
+	runsListResp, err := c.Jobs().RunsList(runsListReq)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(*runsListResp.Runs))
+
+	// Runs Get
+	runID := runNowResp.RunID
+	runsGetReq := httpmodels.RunsGetReq{
+		RunID: runID,
+	}
+	runsGetResp, err := c.Jobs().RunsGet(runsGetReq)
+	assert.Nil(t, err)
+	assert.Equal(t, jobID, runsGetResp.JobID)
+
+	// Runs Export
+	runsExportReq := httpmodels.RunsExportReq{
+		RunID: runID,
+	}
+	runsExportResp, err := c.Jobs().RunsExport(runsExportReq)
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, len(*runsExportResp.Views), 1)
+
+	// wait for the run to complete
+	timeoutCounter := 0
+	for {
+		timeoutCounter++
+
+		runID := runNowResp.RunID
+		runsGetReq := httpmodels.RunsGetReq{
+			RunID: runID,
+		}
+		runsGetResp, err := c.Jobs().RunsGet(runsGetReq)
+		assert.Nil(t, err)
+		if runsGetResp.State.ResultState == models.RunResultStateSuccess {
+			break
+		}
+
+		time.Sleep(10 * time.Second)
+		assert.LessOrEqual(t, timeoutCounter, 12) // total of 120 seconds
+	}
+
+	// Runs Get Output
+	runsGetOutputReq := httpmodels.RunsGetOutputReq{
+		RunID: runID,
+	}
+	runsGetOutputResp, err := c.Jobs().RunsGetOutput(runsGetOutputReq)
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, runsGetOutputResp.NotebookOutput.Result, 1)
+
+	// Runs Delete
+	runsDeleteReq := httpmodels.RunsDeleteReq{
+		RunID: runID,
+	}
+	err = c.Jobs().RunsDelete(runsDeleteReq)
+	assert.Nil(t, err)
+	time.Sleep(1 * time.Second)
+
+	afterTestAzureJobsRuns(t, jobID)
 }
