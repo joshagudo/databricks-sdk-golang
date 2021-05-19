@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	pfx = "testToken"
+	pfxToken = "testToken"
 )
 
 func TestAzureTokenCreateListRevoke(t *testing.T) {
 
-	comment := fmt.Sprintf("%s%s", pfx, randSeq(6))
+	comment := fmt.Sprintf("%s%s", pfxToken, randSeq(6))
 
 	// Test create token and assert no errors
 	createReq := httpmodels.CreateReq{
