@@ -44,7 +44,7 @@ func TestAzureGroupsCreateListDelete(t *testing.T) {
 	assert.False(t, GroupExists(listRes.GroupNames, groupName), fmt.Sprintf("deleted group still exists %+v", deleteReq))
 }
 
-func TestAzureGroupMembersAddListRemove(t *testing.T) {
+func TestAzureGroupMembersAddListRemoveUser(t *testing.T) {
 
 	// Setup: List members in a default 'users' group, assess no errors and pick one user for further tests purposes
 	listAdminReq := httpmodels.ListMembersReq{
@@ -61,51 +61,129 @@ func TestAzureGroupMembersAddListRemove(t *testing.T) {
 
 	userName := (*listAdminResp.Members)[0].UserName
 
-	// Setup: create group
-	groupName := fmt.Sprintf("%s%s", pfxGroup, randSeq(6))
+	// Setup: create parent group
+	parentGroup := fmt.Sprintf("%s%s", pfxGroup, randSeq(6))
 
 	createGroupReq := httpmodels.CreateReq{
-		GroupName: groupName,
+		GroupName: parentGroup,
 	}
-	createRes, e := c.Groups().Create(createGroupReq)
+	_, e = c.Groups().Create(createGroupReq)
 	assert.Nil(t, e, fmt.Sprintf("failed to create group %+v", createGroupReq))
-	assert.NotEmpty(t, createRes.GroupName, fmt.Sprintf("failed to create group %+v", createGroupReq))
 
 	// Add member to a group and assert no errors
 	addMemberReq := httpmodels.AddMemberReq{
 		UserName:   userName,
-		ParentName: groupName,
+		ParentName: parentGroup,
 	}
 	e = c.Groups().AddMember(addMemberReq)
 	assert.Nil(t, e, fmt.Sprintf("failed to add member to a group %+v", addMemberReq))
 
 	// List members in a group and assert member added
 	listMemberReq := httpmodels.ListMembersReq{
-		GroupName: groupName,
+		GroupName: parentGroup,
 	}
 	listMemberResp, e := c.Groups().ListMembers(listMemberReq)
-	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", groupName))
-	assert.True(t, GroupMemberExists(listMemberResp.Members, userName), fmt.Sprintf("added member not found in a group %+v", addMemberReq))
+	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", parentGroup))
+	assert.True(t, GroupMemberExists(listMemberResp.Members, userName, ""), fmt.Sprintf("added member %s not found in a group %s", userName, parentGroup))
+
+	// List member's parents and assert parent group present
+	listParentReq := httpmodels.ListParentsReq{
+		UserName: userName,
+	}
+	listParentResp, e := c.Groups().ListParents(listParentReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to list parents for a member %s", parentGroup))
+	assert.True(t, GroupExists(listParentResp.GroupNames, parentGroup), fmt.Sprintf("parent group %s not listed for a member %s", parentGroup, userName))
 
 	// Remove member from a group and assert no errors
 	removeMemberReq := httpmodels.RemoveMemberReq{
 		UserName:   userName,
-		ParentName: groupName,
+		ParentName: parentGroup,
 	}
 	e = c.Groups().RemoveMember(removeMemberReq)
 	assert.Nil(t, e, fmt.Sprintf("failed to remove member from a group %+v", removeMemberReq))
 
 	// List members in a group and assert member removed
 	listMemberResp, e = c.Groups().ListMembers(listMemberReq)
-	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", groupName))
-	assert.False(t, GroupMemberExists(listMemberResp.Members, userName), fmt.Sprintf("removed member still exists in a group %+v", removeMemberReq))
+	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", parentGroup))
+	assert.False(t, GroupMemberExists(listMemberResp.Members, userName, ""), fmt.Sprintf("removed member still exists in a group %+v", removeMemberReq))
 
-	// Cleanup: delete group
+	// Cleanup: delete parent group
 	deleteReq := httpmodels.DeleteReq{
-		GroupName: groupName,
+		GroupName: parentGroup,
 	}
 	e = c.Groups().Delete(deleteReq)
 	assert.Nil(t, e, fmt.Sprintf("failed to delete group %+v", deleteReq))
+}
+
+func TestAzureGroupMembersAddListRemoveGroup(t *testing.T) {
+	// Setup: create parent group
+	parentGroup := fmt.Sprintf("%s%s", pfxGroup, randSeq(6))
+
+	createGroupReq := httpmodels.CreateReq{
+		GroupName: parentGroup,
+	}
+	_, e := c.Groups().Create(createGroupReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to create parent group %+v", createGroupReq))
+
+	// Setup: create member group
+	memberGroup := fmt.Sprintf("%s%s", pfxGroup, randSeq(6))
+
+	createGroupReq = httpmodels.CreateReq{
+		GroupName: memberGroup,
+	}
+	_, e = c.Groups().Create(createGroupReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to create member group %+v", createGroupReq))
+
+	// Add member to a group and assert no errors
+	addMemberReq := httpmodels.AddMemberReq{
+		GroupName:  memberGroup,
+		ParentName: parentGroup,
+	}
+	e = c.Groups().AddMember(addMemberReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to add member to a group %+v", addMemberReq))
+
+	// List members in a group and assert member added
+	listMemberReq := httpmodels.ListMembersReq{
+		GroupName: parentGroup,
+	}
+	listMemberResp, e := c.Groups().ListMembers(listMemberReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", parentGroup))
+	assert.True(t, GroupMemberExists(listMemberResp.Members, "", memberGroup), fmt.Sprintf("added member %s not found in a group %s", memberGroup, parentGroup))
+
+	// List member's parents and assert parent group present
+	listParentReq := httpmodels.ListParentsReq{
+		GroupName: memberGroup,
+	}
+	listParentResp, e := c.Groups().ListParents(listParentReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to list parents for a member %s", parentGroup))
+	assert.True(t, GroupExists(listParentResp.GroupNames, parentGroup), fmt.Sprintf("parent group %s not listed for a member %s", parentGroup, memberGroup))
+
+	// Remove member from a group and assert no errors
+	removeMemberReq := httpmodels.RemoveMemberReq{
+		GroupName:  memberGroup,
+		ParentName: parentGroup,
+	}
+	e = c.Groups().RemoveMember(removeMemberReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to remove member from a group %+v", removeMemberReq))
+
+	// List members in a group and assert member removed
+	listMemberResp, e = c.Groups().ListMembers(listMemberReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to list members in a group %s", parentGroup))
+	assert.False(t, GroupMemberExists(listMemberResp.Members, "", memberGroup), fmt.Sprintf("removed member still exists in a group %+v", removeMemberReq))
+
+	// Cleanup: delete parent group
+	deleteReq := httpmodels.DeleteReq{
+		GroupName: parentGroup,
+	}
+	e = c.Groups().Delete(deleteReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to delete parent group %+v", deleteReq))
+
+	// Cleanup: delete member group
+	deleteReq = httpmodels.DeleteReq{
+		GroupName: memberGroup,
+	}
+	e = c.Groups().Delete(deleteReq)
+	assert.Nil(t, e, fmt.Sprintf("failed to delete member group %+v", deleteReq))
 }
 
 // GroupExists checks if group exists in the list of group names
@@ -119,10 +197,13 @@ func GroupExists(groups []string, groupName string) bool {
 }
 
 // GroupMemberExists checks if user exists in the list of group members
-func GroupMemberExists(membersPtr *[]models.PrincipalName, userName string) bool {
+func GroupMemberExists(membersPtr *[]models.PrincipalName, userName string, groupName string) bool {
 	if membersPtr != nil {
 		for _, m := range *membersPtr {
-			if m.UserName == userName {
+			if len(userName) > 0 && m.UserName == userName {
+				return true
+			}
+			if len(groupName) > 0 && m.GroupName == groupName {
 				return true
 			}
 		}
