@@ -5,9 +5,9 @@ import (
 )
 
 type ExportReq struct {
-	Path           string               `json:"path,omitempty" url:"path,omitempty"`
-	Format         *models.ExportFormat `json:"format,omitempty" url:"format,omitempty"`
-	DirectDownload bool                 `json:"direct_download,omitempty" url:"direct_download,omitempty"`
+	Path           string              `json:"path,omitempty" url:"path,omitempty"`
+	Format         models.ExportFormat `json:"format,omitempty" url:"format,omitempty"`
+	DirectDownload bool                `json:"direct_download,omitempty" url:"direct_download,omitempty"`
 }
 
 type ExportResp struct {

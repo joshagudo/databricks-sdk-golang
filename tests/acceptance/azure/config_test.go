@@ -7,7 +7,6 @@ import (
 	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
 )
 
-var testConfig map[string]string
 var c *dbAzure.DBClient
 
 const (
@@ -16,8 +15,6 @@ const (
 )
 
 func init() {
-	testConfig = make(map[string]string)
-
 	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
 	c = dbAzure.NewDBClient(opt)
 }
