@@ -18,10 +18,10 @@ var letters = []rune("abcdefghijklmnopqrstuvwxyz")
 func TestAzureWorkspaceList(t *testing.T) {
 	// list and assert
 	const rootPath = "/"
-	listRequest := httpmodels.ListReq{
+	listReq := httpmodels.ListReq{
 		Path: rootPath,
 	}
-	workSpaceList, e := c.Workspace().List(listRequest)
+	workSpaceList, e := c.Workspace().List(listReq)
 	assert.Nil(t, e, "could not list workspaces")
 	assert.NotEqual(t, len(*workSpaceList.Objects), 0, "No workspaces found in root path")
 }
@@ -31,21 +31,21 @@ func TestAzureWorkspaceImportAndDelete(t *testing.T) {
 	var scalaLanguage models.Language = models.LanguageScala
 	var sourceFormat models.ExportFormat = models.ExportFormatSource
 	var samplePath = fmt.Sprintf("/samplenotebook-%s", randSeq(5))
-	importRequestScala := httpmodels.ImportReq{
+	importReqScala := httpmodels.ImportReq{
 		Path:      samplePath,
 		Language:  scalaLanguage,
 		Format:    sourceFormat,
 		Content:   "MSsx\n",
 		Overwrite: true,
 	}
-	assert.Nil(t, c.Workspace().Import(importRequestScala), fmt.Sprintf("could not import request: %s", importRequestScala.Language))
+	assert.Nil(t, c.Workspace().Import(importReqScala), fmt.Sprintf("could not import request: %s", importReqScala.Language))
 
 	// delete and assert
-	deleteRequest := httpmodels.DeleteReq{
+	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
 		Recursive: true,
 	}
-	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", importRequestScala.Language))
+	assert.Nil(t, c.Workspace().Delete(deleteReq), fmt.Sprintf("could not delete the imported resquest: %s", importReqScala.Language))
 }
 
 func TestAzureWorkspaceExport(t *testing.T) {
@@ -53,34 +53,34 @@ func TestAzureWorkspaceExport(t *testing.T) {
 	var pythonLanguage models.Language = models.LanguagePython
 	var sourceFormat models.ExportFormat = models.ExportFormatSource
 	var samplePath = fmt.Sprintf("/samplenotebook-%s", randSeq(5))
-	importRequestPython := httpmodels.ImportReq{
+	importReqPython := httpmodels.ImportReq{
 		Path:      samplePath,
 		Language:  pythonLanguage,
 		Format:    sourceFormat,
 		Content:   "MSsx\n",
 		Overwrite: true,
 	}
-	assert.Nil(t, c.Workspace().Import(importRequestPython), fmt.Sprintf("could not import request for test: %s", importRequestPython.Language))
+	assert.Nil(t, c.Workspace().Import(importReqPython), fmt.Sprintf("could not import request for test: %s", importReqPython.Language))
 
 	// Export and assert
-	exportRequest := httpmodels.ExportReq{
+	exportReq := httpmodels.ExportReq{
 		Path:   samplePath,
 		Format: sourceFormat,
 	}
-	exportResponse, e := c.Workspace().Export(exportRequest)
-	assert.Nil(t, e, fmt.Sprintf("could not export notebook: %s", importRequestPython.Path))
-	strImportReq, e := base64.StdEncoding.DecodeString(importRequestPython.Content)
-	assert.Nil(t, e, fmt.Sprintf("could not decode import request content: %s", importRequestPython.Content))
-	strExportRes, e := base64.StdEncoding.DecodeString(exportResponse.Content)
-	assert.Nil(t, e, fmt.Sprintf("could not decode export response content: %s", exportResponse.Content))
-	assert.Equal(t, true, strings.Contains(string(strExportRes), string(strImportReq)), fmt.Sprintf("Imported content: %s\t Exported content: %s. Are not equal.", importRequestPython.Content, exportResponse.Content))
+	exportRes, e := c.Workspace().Export(exportReq)
+	assert.Nil(t, e, fmt.Sprintf("could not export notebook: %s", importReqPython.Path))
+	strImportReq, e := base64.StdEncoding.DecodeString(importReqPython.Content)
+	assert.Nil(t, e, fmt.Sprintf("could not decode import request content: %s", importReqPython.Content))
+	strExportRes, e := base64.StdEncoding.DecodeString(exportRes.Content)
+	assert.Nil(t, e, fmt.Sprintf("could not decode export response content: %s", exportRes.Content))
+	assert.Equal(t, true, strings.Contains(string(strExportRes), string(strImportReq)), fmt.Sprintf("Imported content: %s\t Exported content: %s. Are not equal.", importReqPython.Content, exportRes.Content))
 
 	// delete and assert
-	deleteRequest := httpmodels.DeleteReq{
+	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
 		Recursive: true,
 	}
-	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", importRequestPython.Language))
+	assert.Nil(t, c.Workspace().Delete(deleteReq), fmt.Sprintf("could not delete the imported resquest: %s", importReqPython.Language))
 }
 
 func TestAzureWorkspaceGetStatus(t *testing.T) {
@@ -88,46 +88,46 @@ func TestAzureWorkspaceGetStatus(t *testing.T) {
 	var scalaLanguage models.Language = models.LanguageScala
 	var sourceFormat models.ExportFormat = models.ExportFormatSource
 	var samplePath = fmt.Sprintf("/samplenotebook-%s", randSeq(5))
-	importRequestScala := httpmodels.ImportReq{
+	importReqScala := httpmodels.ImportReq{
 		Path:      samplePath,
 		Language:  scalaLanguage,
 		Format:    sourceFormat,
 		Content:   "MSsx\n",
 		Overwrite: true,
 	}
-	assert.Nil(t, c.Workspace().Import(importRequestScala), fmt.Sprintf("could not import request: %s", importRequestScala.Language))
+	assert.Nil(t, c.Workspace().Import(importReqScala), fmt.Sprintf("could not import request: %s", importReqScala.Language))
 
 	// getstatus and assert
-	statusRequest := httpmodels.GetStatusReq{
+	statusReq := httpmodels.GetStatusReq{
 		Path: samplePath,
 	}
-	getStatusResponse, e := c.Workspace().GetStatus(statusRequest)
-	assert.Nil(t, e, fmt.Sprintf("could not get status from workspace: %s", importRequestScala.Path))
-	assert.Equal(t, samplePath, getStatusResponse.Path, fmt.Sprintf("Import path: %s and Status path: %s. Not equal.", samplePath, getStatusResponse.Path))
+	getStatusRes, e := c.Workspace().GetStatus(statusReq)
+	assert.Nil(t, e, fmt.Sprintf("could not get status from workspace: %s", importReqScala.Path))
+	assert.Equal(t, samplePath, getStatusRes.Path, fmt.Sprintf("Import path: %s and Status path: %s. Not equal.", samplePath, getStatusRes.Path))
 
 	// delete and assert
-	deleteRequest := httpmodels.DeleteReq{
+	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
 		Recursive: true,
 	}
-	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", importRequestScala.Language))
+	assert.Nil(t, c.Workspace().Delete(deleteReq), fmt.Sprintf("could not delete the imported resquest: %s", importReqScala.Language))
 }
 
 func TestAzureWorkspaceMkdirs(t *testing.T) {
 	// import and assert
 	samplePath := fmt.Sprintf("/samplenotebook-%s", randSeq(5))
-	mkdirsRequest := httpmodels.MkdirsReq{
+	mkdirsReq := httpmodels.MkdirsReq{
 		Path: samplePath,
 	}
 
-	assert.Nil(t, c.Workspace().Mkdirs(mkdirsRequest), fmt.Sprintf("could not mkdir: %s", samplePath))
+	assert.Nil(t, c.Workspace().Mkdirs(mkdirsReq), fmt.Sprintf("could not mkdir: %s", samplePath))
 
 	// delete and assert
-	deleteRequest := httpmodels.DeleteReq{
+	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
 		Recursive: true,
 	}
-	assert.Nil(t, c.Workspace().Delete(deleteRequest), fmt.Sprintf("could not delete the imported resquest: %s", samplePath))
+	assert.Nil(t, c.Workspace().Delete(deleteReq), fmt.Sprintf("could not delete the imported resquest: %s", samplePath))
 }
 
 func randSeq(n int) string {
