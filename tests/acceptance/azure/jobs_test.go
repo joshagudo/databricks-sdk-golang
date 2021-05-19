@@ -25,7 +25,7 @@ func beforeTestAzureJobsJob(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func TestAzureJobsJob(t *testing.T) {
+func TestAzureJobsJobs(t *testing.T) {
 	beforeTestAzureJobsJob(t)
 
 	jobName := "my-test-job-name"
@@ -114,5 +114,5 @@ func TestAzureJobsJob(t *testing.T) {
 	assert.Contains(t, err.Error(), "does not exist")
 }
 
-func TestAzureJobsRun(t *testing.T) {
+func TestAzureJobsRuns(t *testing.T) {
 }
