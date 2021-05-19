@@ -1,8 +1,11 @@
 package azure_test
 
 import (
+	"math/rand"
 	"os"
+	"time"
 
+	"github.com/joho/godotenv"
 	databricks "github.com/polar-rams/databricks-sdk-golang"
 	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
 )
@@ -15,6 +18,13 @@ const (
 )
 
 func init() {
+	_, hostSet := os.LookupEnv(DATABRICKS_HOST_KEY)
+	_, tokenSet := os.LookupEnv(DATABRICKS_TOKEN_KEY)
+
+	if !hostSet || !tokenSet {
+		godotenv.Load()
+	}
+
 	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
 	c = dbAzure.NewDBClient(opt)
 }
