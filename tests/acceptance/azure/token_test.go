@@ -10,12 +10,12 @@ import (
 )
 
 const (
-	pfx = "testToken"
+	pfxToken = "testToken"
 )
 
 func TestAzureTokenCreateListRevoke(t *testing.T) {
 
-	comment := fmt.Sprintf("%s%s", pfx, randSeq(6))
+	comment := fmt.Sprintf("%s%s", pfxToken, randSeq(6))
 
 	// Test create token and assert no errors
 	createReq := httpmodels.CreateReq{
@@ -45,9 +45,9 @@ func TestAzureTokenCreateListRevoke(t *testing.T) {
 }
 
 // TokenExists checks if token exists in the list of tokens
-func TokenExists(tokensPtr *[]models.PublicTokenInfo, comment string) bool {
-	if tokensPtr != nil {
-		for _, t := range *tokensPtr {
+func TokenExists(tokens *[]models.PublicTokenInfo, comment string) bool {
+	if tokens != nil {
+		for _, t := range *tokens {
 			if t.Comment == comment {
 				return true
 			}
