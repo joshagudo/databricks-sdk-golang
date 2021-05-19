@@ -197,9 +197,9 @@ func GroupExists(groups []string, groupName string) bool {
 }
 
 // GroupMemberExists checks if user exists in the list of group members
-func GroupMemberExists(membersPtr *[]models.PrincipalName, userName string, groupName string) bool {
-	if membersPtr != nil {
-		for _, m := range *membersPtr {
+func GroupMemberExists(members *[]models.PrincipalName, userName string, groupName string) bool {
+	if members != nil {
+		for _, m := range *members {
 			if len(userName) > 0 && m.UserName == userName {
 				return true
 			}
