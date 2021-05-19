@@ -44,8 +44,9 @@ func TestAzureSecretsScopeCreateListDelete(t *testing.T) {
 	lscr, e = c.Secrets().ListSecretScopes()
 	assert.Nil(t, e, "could not list scopes after deletion")
 
-	sc = lscr.Scopes
-	assert.NotEqual(t, SctScpExists(*sc, scpNm), true, fmt.Sprintf("expected secret scope %s to not exist after deletion", scpNm))
+	if sc = lscr.Scopes; sc != nil {
+		assert.NotEqual(t, SctScpExists(*sc, scpNm), true, fmt.Sprintf("expected secret scope %s to not exist after deletion", scpNm))
+	}
 
 }
 
@@ -98,8 +99,78 @@ func TestAzureSecretsPutListDelete(t *testing.T) {
 	lsrsp, e = c.Secrets().ListSecrets(lsr)
 	assert.Nil(t, e, fmt.Sprintf("could not list secrets after secret deletion in scope %s", scpNm))
 
-	s = lsrsp.Secrets
-	assert.NotEqual(t, SctExists(s, sctKy), true, fmt.Sprintf("Expected secret %s to not exist after deletion", sctKy))
+	if s = lsrsp.Secrets; s != nil {
+		assert.NotEqual(t, SctExists(s, sctKy), true, fmt.Sprintf("Expected secret %s to not exist after deletion", sctKy))
+	}
+}
+
+func TestAzureSecretsACLPutGetListDelete(t *testing.T) {
+
+	const (
+		aclPrin = "admins"
+		aclPerm = "READ"
+	)
+
+	// setup random suffix for test object names
+	nmSfx := randSeq(6)
+
+	scpNm := fmt.Sprintf("%s%s%s", scpNmPfx, "SE", nmSfx)
+
+	// Setup Secret Scope for secrets and assert
+	csr := httpmodels.CreateSecretScopeReq{
+		Scope:                  scpNm,
+		InitialManagePrincipal: scpUsers,
+	}
+	e := c.Secrets().CreateSecretScope(csr)
+	assert.Nil(t, e, fmt.Sprintf("could not create secret scope %s", scpNm))
+
+	// Put Secret ACL and assert
+	psr := httpmodels.PutSecretACLReq{
+		Scope:      scpNm,
+		Principal:  aclPrin,
+		Permission: aclPerm,
+	}
+	e = c.Secrets().PutSecretACL(psr)
+	assert.Nil(t, e, fmt.Sprintf("could not put secret acl  for scope: %s, Principal: %s, Permission: %s", scpNm, aclPrin, aclPerm))
+
+	// Get Secret ACL and assert
+	gsr := httpmodels.GetSecretACLReq{
+		Scope:     scpNm,
+		Principal: aclPrin,
+	}
+
+	gsrsp, e := c.Secrets().GetSecretACL(gsr)
+	assert.Nil(t, e, "could not get secret ACL")
+	assert.Equal(t, string(gsrsp.Permission), aclPerm, "secret ACL permission not as expected")
+
+	// List Secret ACL and Assert
+	lsr := httpmodels.ListSecretACLsReq{
+		Scope: scpNm,
+	}
+	lsrsp, e := c.Secrets().ListSecretACLs(lsr)
+	assert.Nil(t, e, fmt.Sprintf("could not list secrets acls in scope %s", scpNm))
+
+	s := lsrsp.Items
+	assert.Equal(t, GetSctACLPermission(s, aclPrin), "READ", "ACL permission not as Expected")
+
+	// Test Delete Secret ACL and Assert
+	dsr := httpmodels.DeleteSecretACLReq{
+		Scope:     scpNm,
+		Principal: aclPrin,
+	}
+	e = c.Secrets().DeleteSecretACL(dsr)
+	assert.Nil(t, e, fmt.Sprintf("could not delete secret acl for scope: %s, Principal: %s", scpNm, aclPrin))
+
+	lsr = httpmodels.ListSecretACLsReq{
+		Scope: scpNm,
+	}
+	lsrsp, e = c.Secrets().ListSecretACLs(lsr)
+	assert.Nil(t, e, fmt.Sprintf("could not list secrets acls in scope %s after deletion", scpNm))
+
+	s = lsrsp.Items
+	if s != nil {
+		assert.NotEqual(t, GetSctACLPermission(s, aclPrin), "READ", "Did not expect ACL permission to exist after deletion ")
+	}
 }
 
 // SctScpExists checks if scope name exists in secret scopes
@@ -120,4 +191,16 @@ func SctExists(s []models.SecretMetadata, sctKy string) bool {
 		}
 	}
 	return false
+}
+
+// Returns Secret ACL permissions for a given principal
+func GetSctACLPermission(s []models.ACLItem, prin string) string {
+
+	for _, acl := range s {
+		if acl.Principal == prin {
+			return string(acl.Permission)
+
+		}
+	}
+	return ""
 }
