@@ -12,7 +12,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var testJobNotebookPath = "/ScalaExampleNotebook"
+const testJobNotebookPath = "/ScalaExampleNotebook"
+
+var testJobClusterSpec = &models.NewCluster{
+	SparkVersion: "7.3.x-scala2.12",
+	NodeTypeID:   "Standard_D3_v2",
+	NumWorkers:   1,
+}
 
 func beforeTestAzureJobsJobs(t *testing.T) {
 	importReq := workspaceHTTPModels.ImportReq{
@@ -29,16 +35,12 @@ func beforeTestAzureJobsJobs(t *testing.T) {
 func TestAzureJobsJobs(t *testing.T) {
 	beforeTestAzureJobsJobs(t)
 
-	jobName := "my-test-job-name"
+	const jobName = "my-test-job-name"
 
 	// Create
 	createReq := httpmodels.CreateReq{
-		Name: jobName,
-		NewCluster: &models.NewCluster{
-			SparkVersion: "7.3.x-scala2.12",
-			NodeTypeID:   "Standard_D3_v2",
-			NumWorkers:   1,
-		},
+		Name:       jobName,
+		NewCluster: testJobClusterSpec,
 		NotebookTask: &models.NotebookTask{
 			NotebookPath: testJobNotebookPath,
 		},
@@ -82,12 +84,8 @@ func TestAzureJobsJobs(t *testing.T) {
 	resetReq := httpmodels.ResetReq{
 		JobID: jobID,
 		NewSettings: &models.JobSettings{
-			Name: jobName,
-			NewCluster: &models.NewCluster{
-				SparkVersion: "7.3.x-scala2.12",
-				NodeTypeID:   "Standard_D3_v2",
-				NumWorkers:   1,
-			},
+			Name:       jobName,
+			NewCluster: testJobClusterSpec,
 			NotebookTask: &models.NotebookTask{
 				NotebookPath: testJobNotebookPath,
 			},
@@ -119,12 +117,8 @@ func beforeTestAzureJobsRuns(t *testing.T) int64 {
 	beforeTestAzureJobsJobs(t)
 
 	createJobReq := httpmodels.CreateReq{
-		Name: "my-test-job-name",
-		NewCluster: &models.NewCluster{
-			SparkVersion: "7.3.x-scala2.12",
-			NodeTypeID:   "Standard_D3_v2",
-			NumWorkers:   1,
-		},
+		Name:       "my-test-job-name",
+		NewCluster: testJobClusterSpec,
 		NotebookTask: &models.NotebookTask{
 			NotebookPath: testJobNotebookPath,
 		},
@@ -223,12 +217,8 @@ func TestAzureJobsRuns(t *testing.T) {
 
 	// Runs Submit
 	runsSubmitReq := httpmodels.RunsSubmitReq{
-		RunName: "my-test-run-name",
-		NewCluster: &models.NewCluster{
-			SparkVersion: "7.3.x-scala2.12",
-			NodeTypeID:   "Standard_D3_v2",
-			NumWorkers:   1,
-		},
+		RunName:    "my-test-run-name",
+		NewCluster: testJobClusterSpec,
 		NotebookTask: &models.NotebookTask{
 			NotebookPath: testJobNotebookPath,
 		},
