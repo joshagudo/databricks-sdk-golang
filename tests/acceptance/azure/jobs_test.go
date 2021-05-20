@@ -1,6 +1,7 @@
 package azure_test
 
 import (
+	"log"
 	"testing"
 	"time"
 
@@ -142,7 +143,6 @@ func afterTestAzureJobsRuns(t *testing.T, jobID int64) {
 	}
 	err := c.Jobs().Delete(deleteJobReq)
 	assert.Nil(t, err)
-	time.Sleep(1 * time.Second)
 }
 
 func TestAzureJobsRuns(t *testing.T) {
@@ -179,14 +179,6 @@ func TestAzureJobsRuns(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, jobID, runsGetResp.JobID)
 
-	// Runs Export
-	runsExportReq := httpmodels.RunsExportReq{
-		RunID: runID,
-	}
-	runsExportResp, err := c.Jobs().RunsExport(runsExportReq)
-	assert.Nil(t, err)
-	assert.GreaterOrEqual(t, len(*runsExportResp.Views), 1)
-
 	// wait for the run to complete
 	timeoutCounter := 0
 	for {
@@ -197,14 +189,26 @@ func TestAzureJobsRuns(t *testing.T) {
 			RunID: runID,
 		}
 		runsGetResp, err := c.Jobs().RunsGet(runsGetReq)
+		log.Printf("Waiting for the run to complete, current state: %+v", runsGetResp.State)
+
 		assert.Nil(t, err)
-		if runsGetResp.State.ResultState == models.RunResultStateSuccess {
+		if runsGetResp.State.LifeCycleState == models.RunLifeCycleStateTerminated {
 			break
 		}
 
 		time.Sleep(10 * time.Second)
-		assert.LessOrEqual(t, timeoutCounter, 12) // total of 120 seconds
+		assert.LessOrEqual(t, timeoutCounter, 60) // total of 600 seconds
 	}
+
+	// Runs Export
+	runsExportReq := httpmodels.RunsExportReq{
+		RunID:         runID,
+		ViewsToExport: models.ViewsToExportCode,
+	}
+	runsExportResp, err := c.Jobs().RunsExport(runsExportReq)
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, len(*runsExportResp.Views), 1)
+	time.Sleep(1 * time.Second)
 
 	// Runs Get Output
 	runsGetOutputReq := httpmodels.RunsGetOutputReq{
@@ -212,7 +216,34 @@ func TestAzureJobsRuns(t *testing.T) {
 	}
 	runsGetOutputResp, err := c.Jobs().RunsGetOutput(runsGetOutputReq)
 	assert.Nil(t, err)
-	assert.GreaterOrEqual(t, runsGetOutputResp.NotebookOutput.Result, 1)
+	assert.Equal(t, runsGetOutputResp.Metadata.RunID, runID)
+	time.Sleep(15 * time.Second)
+
+	afterTestAzureJobsRuns(t, jobID)
+
+	// Runs Submit
+	runsSubmitReq := httpmodels.RunsSubmitReq{
+		RunName: "my-test-run-name",
+		NewCluster: &models.NewCluster{
+			SparkVersion: "7.3.x-scala2.12",
+			NodeTypeID:   "Standard_D3_v2",
+			NumWorkers:   1,
+		},
+		NotebookTask: &models.NotebookTask{
+			NotebookPath: testJobNotebookPath,
+		},
+	}
+	runsSubmitResp, err := c.Jobs().RunsSubmit(runsSubmitReq)
+	assert.Nil(t, err)
+	assert.GreaterOrEqual(t, runsSubmitResp.RunID, int64(1))
+
+	// Runs Cancel
+	runsCancelReq := httpmodels.RunsCancelReq{
+		RunID: int64(runsSubmitResp.RunID),
+	}
+	err = c.Jobs().RunsCancel(runsCancelReq)
+	assert.Nil(t, err)
+	time.Sleep(10 * time.Second)
 
 	// Runs Delete
 	runsDeleteReq := httpmodels.RunsDeleteReq{
@@ -221,6 +252,4 @@ func TestAzureJobsRuns(t *testing.T) {
 	err = c.Jobs().RunsDelete(runsDeleteReq)
 	assert.Nil(t, err)
 	time.Sleep(1 * time.Second)
-
-	afterTestAzureJobsRuns(t, jobID)
 }

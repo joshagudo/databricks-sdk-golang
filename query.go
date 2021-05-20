@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 
 	"github.com/google/go-querystring/query"
@@ -41,7 +40,6 @@ func PerformQuery(option DBClientOption, method, path string, data interface{}, 
 		}
 		requestBody = bodyBytes
 	}
-	log.Printf("URL: %s", requestURL)
 
 	client := option.getHTTPClient()
 
