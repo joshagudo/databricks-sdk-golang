@@ -18,7 +18,7 @@ func (a TokenAPI) init(client DBClient) TokenAPI {
 }
 
 // Create creates and return a token
-func (a SecretsAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
+func (a TokenAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, error) {
 	var resp httpmodels.CreateResp
 
 	jsonResp, err := a.Client.performQuery(http.MethodPost, "/token/create", req, nil)
@@ -31,7 +31,7 @@ func (a SecretsAPI) Create(req httpmodels.CreateReq) (httpmodels.CreateResp, err
 }
 
 // List lists all the valid tokens for a user-workspace pair
-func (a SecretsAPI) List() (httpmodels.ListResp, error) {
+func (a TokenAPI) List() (httpmodels.ListResp, error) {
 	var resp httpmodels.ListResp
 
 	jsonResp, err := a.Client.performQuery(http.MethodGet, "/token/list", nil, nil)
@@ -44,7 +44,7 @@ func (a SecretsAPI) List() (httpmodels.ListResp, error) {
 }
 
 // Revoke revokes an access token
-func (a SecretsAPI) Revoke(req httpmodels.DeleteReq) error {
+func (a TokenAPI) Revoke(req httpmodels.DeleteReq) error {
 	_, err := a.Client.performQuery(http.MethodPost, "/token/delete", req, nil)
 	return err
 }
