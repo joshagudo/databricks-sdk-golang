@@ -57,9 +57,7 @@ func TestAzureDBFSCreateListAddblockClose(t *testing.T) {
 	e = c.Dbfs().AddBlock(addblockReq)
 	assert.Nil(t, e, "Could not add data to the file.")
 
-	closeReq := httpmodels.CloseReq{
-		Handle: handler.Handle,
-	}
+	closeReq := httpmodels.CloseReq(handler)
 
 	e = c.Dbfs().Close(closeReq)
 	assert.Nil(t, e, "Could not close the file.")
@@ -84,9 +82,9 @@ func TestAzureDBFSPutRead(t *testing.T) {
 	}
 
 	resp, e := c.Dbfs().Read(readReq)
+	assert.Nil(t, e, "Could not read the file")
 	assert.NotEqual(t, resp.BytesRead, 0)
 	assert.Equal(t, resp.Data, putReq.Contents)
-
 }
 
 // Move the file from one dir to another

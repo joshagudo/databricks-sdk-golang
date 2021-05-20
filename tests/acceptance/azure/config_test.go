@@ -1,6 +1,7 @@
 package azure_test
 
 import (
+	"log"
 	"math/rand"
 	"os"
 	"time"
@@ -22,7 +23,10 @@ func init() {
 	_, tokenSet := os.LookupEnv(DATABRICKS_TOKEN_KEY)
 
 	if !hostSet || !tokenSet {
-		godotenv.Load()
+		e := godotenv.Load()
+		if e != nil {
+			log.Fatalln("Failed to load environment variables.")
+		}
 	}
 
 	opt := databricks.NewDBClientOption("", "", os.Getenv(DATABRICKS_HOST_KEY), os.Getenv(DATABRICKS_TOKEN_KEY), nil, false, 0)
