@@ -207,10 +207,9 @@ func CreateTestSecretScope(scpNm, scpUsers string) error {
 }
 
 // Delete Test Secret Scope
-func DeleteTestSecretScope(scpNm string) error {
+func DeleteTestSecretScope(scpNm string) {
 	dscr := httpmodels.DeleteSecretScopeReq{
 		Scope: scpNm,
 	}
-	e := c.Secrets().DeleteSecretScope(dscr)
-	return e
+	_ = c.Secrets().DeleteSecretScope(dscr)
 }
