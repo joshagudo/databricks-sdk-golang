@@ -9,4 +9,6 @@ const (
 	TerminationParameterInstanceID             = "instance_id"
 	TerminationParameterAzureErrorCode         = "azure_error_code"
 	TerminationParameterAzureErrorMessage      = "azure_error_message"
+	TerminationParameterInstancePoolID         = "instance_pool_id"
+	TerminationParameterInstancePoolErrorCode  = "instance_pool_error_code"
 )

@@ -15,7 +15,7 @@ type EventsReq struct {
 }
 
 type EventsResp struct {
-	Events     *[]models.ClusterEvent `json:"events,omitempty" url:"events,omitempty"`
-	NextPage   EventsReq              `json:"next_page,omitempty" url:"next_page,omitempty"`
-	TotalCount int32                  `json:"total_count,omitempty" url:"total_count,omitempty"`
+	Events     []models.ClusterEvent `json:"events,omitempty" url:"events,omitempty"`
+	NextPage   EventsReq             `json:"next_page,omitempty" url:"next_page,omitempty"`
+	TotalCount int32                 `json:"total_count,omitempty" url:"total_count,omitempty"`
 }

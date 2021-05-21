@@ -36,7 +36,7 @@ jobs:
         DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
       run: |
         go build all
-        go test -run "TestAzure" ./tests/acceptance/azure/ -v
+        go test -run "TestAzure" -timeout 30m ./tests/acceptance/azure/ -v
     
     - name: Clean up
       env:
