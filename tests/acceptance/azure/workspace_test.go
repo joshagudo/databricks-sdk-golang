@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
 	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
@@ -38,6 +39,8 @@ func TestAzureWorkspaceImportAndDelete(t *testing.T) {
 	}
 	assert.Nil(t, c.Workspace().Import(importReqScala), fmt.Sprintf("could not import request: %s", importReqScala.Language))
 
+	// include sleep to avoid 429s
+	time.Sleep(3 * time.Second)
 	// delete and assert
 	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
@@ -73,6 +76,8 @@ func TestAzureWorkspaceExport(t *testing.T) {
 	assert.Nil(t, e, fmt.Sprintf("could not decode export response content: %s", exportRes.Content))
 	assert.Equal(t, true, strings.Contains(string(strExportRes), string(strImportReq)), fmt.Sprintf("Imported content: %s\t Exported content: %s. Are not equal.", importReqPython.Content, exportRes.Content))
 
+	// include sleep to avoid 429s
+	time.Sleep(3 * time.Second)
 	// delete and assert
 	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
@@ -103,6 +108,8 @@ func TestAzureWorkspaceGetStatus(t *testing.T) {
 	assert.Nil(t, e, fmt.Sprintf("could not get status from workspace: %s", importReqScala.Path))
 	assert.Equal(t, samplePath, getStatusRes.Path, fmt.Sprintf("Import path: %s and Status path: %s. Not equal.", samplePath, getStatusRes.Path))
 
+	// include sleep to avoid 429s
+	time.Sleep(3 * time.Second)
 	// delete and assert
 	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,
@@ -120,6 +127,8 @@ func TestAzureWorkspaceMkdirs(t *testing.T) {
 
 	assert.Nil(t, c.Workspace().Mkdirs(mkdirsReq), fmt.Sprintf("could not mkdir: %s", samplePath))
 
+	// include sleep to avoid 429s
+	time.Sleep(3 * time.Second)
 	// delete and assert
 	deleteReq := httpmodels.DeleteReq{
 		Path:      samplePath,

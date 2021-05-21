@@ -21,7 +21,10 @@ RUN \
     # --> Install impl
     && go get github.com/sasha-s/goimpl/cmd/goimpl \ 
     # --> Install junit converter
-    && go get github.com/jstemmer/go-junit-report
+    && go get github.com/jstemmer/go-junit-report \
+    # --> install linter tools 
+    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+
 
 # [Optional] Uncomment this line to install global node packages. 
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1

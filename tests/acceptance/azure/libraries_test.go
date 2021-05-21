@@ -121,9 +121,9 @@ func (suite *ClusterId) TestLibrariesUninstall() {
 
 /* Delete the cluster after all the tests in the suite finish */
 func (suite *ClusterId) TearDownSuite() {
-	clusterDelReq := clusterHttpModels.DeleteReq{
+	clusterDelReq := clusterHttpModels.PermanentDeleteReq{
 		ClusterID: suite.clusterId,
 	}
-	error := c.Clusters().Delete(clusterDelReq)
+	error := c.Clusters().PermanentDelete(clusterDelReq)
 	suite.Equal(nil, error)
 }
