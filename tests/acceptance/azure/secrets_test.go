@@ -19,11 +19,7 @@ func TestAzureSecretsScopeCreateListDelete(t *testing.T) {
 	scpNm := fmt.Sprintf("%s%s%s", scpNmPfx, "SS", randSeq(6))
 
 	// Test Create Secret Scope and assert
-	csr := httpmodels.CreateSecretScopeReq{
-		Scope:                  scpNm,
-		InitialManagePrincipal: scpUsers,
-	}
-	e := c.Secrets().CreateSecretScope(csr)
+	e := CreateTestSecretScope(scpNm, scpUsers)
 	assert.Nil(t, e, fmt.Sprintf("could not create secret scope %s", scpNm))
 
 	// Test List Secret Scopes and assert scope exists
@@ -58,11 +54,8 @@ func TestAzureSecretsPutListDelete(t *testing.T) {
 	scpNm := fmt.Sprintf("%s%s%s", scpNmPfx, "SA", nmSfx)
 
 	// Setup Secret Scope for secrets and assert
-	csr := httpmodels.CreateSecretScopeReq{
-		Scope:                  scpNm,
-		InitialManagePrincipal: scpUsers,
-	}
-	e := c.Secrets().CreateSecretScope(csr)
+	e := CreateTestSecretScope(scpNm, scpUsers)
+	defer DeleteTestSecretScope(scpNm)
 	assert.Nil(t, e, fmt.Sprintf("could not create secret scope %s", scpNm))
 
 	// Put Secret and Assert
@@ -117,11 +110,8 @@ func TestAzureSecretsACLPutGetListDelete(t *testing.T) {
 	scpNm := fmt.Sprintf("%s%s%s", scpNmPfx, "SE", nmSfx)
 
 	// Setup Secret Scope for secrets and assert
-	csr := httpmodels.CreateSecretScopeReq{
-		Scope:                  scpNm,
-		InitialManagePrincipal: scpUsers,
-	}
-	e := c.Secrets().CreateSecretScope(csr)
+	e := CreateTestSecretScope(scpNm, scpUsers)
+	defer DeleteTestSecretScope(scpNm)
 	assert.Nil(t, e, fmt.Sprintf("could not create secret scope %s", scpNm))
 
 	// Put Secret ACL and assert
@@ -203,4 +193,24 @@ func GetSctACLPermission(s []models.ACLItem, prin string) string {
 		}
 	}
 	return ""
+}
+
+// Create Test Secret Scope
+func CreateTestSecretScope(scpNm, scpUsers string) error {
+	csr := httpmodels.CreateSecretScopeReq{
+		Scope:                  scpNm,
+		InitialManagePrincipal: scpUsers,
+	}
+	e := c.Secrets().CreateSecretScope(csr)
+
+	return e
+}
+
+// Delete Test Secret Scope
+func DeleteTestSecretScope(scpNm string) error {
+	dscr := httpmodels.DeleteSecretScopeReq{
+		Scope: scpNm,
+	}
+	e := c.Secrets().DeleteSecretScope(dscr)
+	return e
 }
