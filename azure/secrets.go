@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/secrets/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/secrets/httpmodels"
 )
 
 // SecretsAPI exposes the Secrets API

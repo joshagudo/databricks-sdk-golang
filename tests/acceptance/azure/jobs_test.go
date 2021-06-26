@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/models"
-	workspaceHTTPModels "github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
-	workspaceModels "github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/jobs/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/jobs/models"
+	workspaceHTTPModels "github.com/gpompe/databricks-sdk-golang/azure/workspace/httpmodels"
+	workspaceModels "github.com/gpompe/databricks-sdk-golang/azure/workspace/models"
 	"github.com/stretchr/testify/assert"
 )
 

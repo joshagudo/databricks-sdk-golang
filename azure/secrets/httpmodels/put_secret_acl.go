@@ -1,6 +1,6 @@
 package httpmodels
 
-import "github.com/polar-rams/databricks-sdk-golang/azure/secrets/models"
+import "github.com/gpompe/databricks-sdk-golang/azure/secrets/models"
 
 type PutSecretACLReq struct {
 	Scope      string               `json:"scope,omitempty" url:"scope,omitempty"`

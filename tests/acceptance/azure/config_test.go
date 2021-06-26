@@ -6,9 +6,9 @@ import (
 	"os"
 	"time"
 
+	databricks "github.com/gpompe/databricks-sdk-golang"
+	dbAzure "github.com/gpompe/databricks-sdk-golang/azure"
 	"github.com/joho/godotenv"
-	databricks "github.com/polar-rams/databricks-sdk-golang"
-	dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
 )
 
 var c *dbAzure.DBClient

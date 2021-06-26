@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/clusters/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/clusters/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/clusters/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/clusters/models"
 	"github.com/stretchr/testify/assert"
 )
 

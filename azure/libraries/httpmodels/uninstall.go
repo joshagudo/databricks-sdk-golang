@@ -1,6 +1,6 @@
 package httpmodels
 
-import "github.com/polar-rams/databricks-sdk-golang/azure/libraries/models"
+import "github.com/gpompe/databricks-sdk-golang/azure/libraries/models"
 
 type UninstallReq struct {
 	ClusterID string            `json:"cluster_id,omitempty" url:"cluster_id,omitempty"`

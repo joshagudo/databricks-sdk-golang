@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/workspace/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/workspace/models"
 	"github.com/stretchr/testify/assert"
 )
 

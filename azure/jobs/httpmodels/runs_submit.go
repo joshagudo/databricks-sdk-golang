@@ -1,8 +1,8 @@
 package httpmodels
 
 import (
-	"github.com/polar-rams/databricks-sdk-golang/azure/jobs/models"
-	libraryModels "github.com/polar-rams/databricks-sdk-golang/azure/libraries/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/jobs/models"
+	libraryModels "github.com/gpompe/databricks-sdk-golang/azure/libraries/models"
 )
 
 type RunsSubmitReq struct {

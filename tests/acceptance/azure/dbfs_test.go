@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/dbfs/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/dbfs/httpmodels"
 	"github.com/stretchr/testify/assert"
 )
 

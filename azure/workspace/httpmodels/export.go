@@ -1,7 +1,7 @@
 package httpmodels
 
 import (
-	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/workspace/models"
 )
 
 type ExportReq struct {

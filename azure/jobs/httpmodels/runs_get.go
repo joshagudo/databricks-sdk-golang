@@ -1,6 +1,6 @@
 package httpmodels
 
-import "github.com/polar-rams/databricks-sdk-golang/azure/jobs/models"
+import "github.com/gpompe/databricks-sdk-golang/azure/jobs/models"
 
 type RunsGetReq struct {
 	RunID int64 `json:"run_id,omitempty" url:"run_id,omitempty"`

@@ -1,7 +1,7 @@
 package httpmodels
 
 import (
-	"github.com/polar-rams/databricks-sdk-golang/azure/instance_pools/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/instance_pools/models"
 )
 
 //ListResp is to compose the response to list an array of instance pools' stats

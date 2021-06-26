@@ -1,7 +1,7 @@
 package models
 
 import (
-	libraryModels "github.com/polar-rams/databricks-sdk-golang/azure/libraries/models"
+	libraryModels "github.com/gpompe/databricks-sdk-golang/azure/libraries/models"
 )
 
 type JobSettings struct {

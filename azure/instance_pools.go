@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/instance_pools/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/instance_pools/httpmodels"
 )
 
 // InstancePoolsAPI exposes the InstancePools API

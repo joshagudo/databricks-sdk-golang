@@ -8,9 +8,9 @@ This is a Golang SDK for [DataBricks REST API 2.0](https://docs.databricks.com/a
 
 ```go
 import (
-  databricks "github.com/polar-rams/databricks-sdk-golang"
-  dbAzure "github.com/polar-rams/databricks-sdk-golang/azure"
-  // dbAws "github.com/polar-rams/databricks-sdk-golang/aws"
+  databricks "github.com/gpompe/databricks-sdk-golang"
+  dbAzure "github.com/gpompe/databricks-sdk-golang/azure"
+
 )
 
 opt := databricks.NewDBClientOption("", "", os.Getenv("DATABRICKS_HOST"), os.Getenv("DATABRICKS_TOKEN"))
@@ -24,22 +24,22 @@ jobs, err := c.Jobs().List()
 | API  | AWS | Azure |
 | :--- | :---: | :---: |
 | Account API | ✗ | N/A |
-| Clusters API | ✔ (Outdated) | ✔ |
+| Clusters API | ✗ | ✔ |
 | Cluster Policies API | ✗ | ✗ |
-| DBFS API | ✔ (Outdated) | ✔ |
+| DBFS API | ✗ | ✔ |
 | Global Init Scripts API | ✗ | ✗ |
-| Groups API | ✔ (Outdated) | ✔ |
+| Groups API | ✗ | ✔ |
 | Instance Pools API | ✗ | ✔ |
-| Instance Profiles API | ✔ (Outdated) | N/A |
+| Instance Profiles API | ✗ | N/A |
 | IP Access List API | ✗ | ✗ |
-| Jobs API | ✔ (Outdated) | ✔ |
-| Libraries API | ✔ (Outdated) | ✔ |
+| Jobs API | ✗ | ✔ |
+| Libraries API | ✗ | ✔ |
 | MLflow** API | ✗ | ✗ |
 | Permissions API | ✗ | ✗ |
 | SCIM** API | ✗ | ✗ |
-| Secrets API | ✔ (Outdated) | ✔ |
-| Token API | ✔ (Outdated) | ✔ |
+| Secrets API | ✗ | ✔ |
+| Token API | ✗ | ✔ |
 | Token Management API | ✗ | ✗ |
-| Workspace API | ✔ (Outdated) | ✔ |
+| Workspace API | ✗ | ✔ |
 
 ** SCIM and MLflow are separate systems that are planned differently.

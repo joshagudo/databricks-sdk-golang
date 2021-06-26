@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/workspace/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/workspace/httpmodels"
 )
 
 // WorkspaceAPI exposes the Workspace API

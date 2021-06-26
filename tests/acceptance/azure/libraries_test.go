@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	clusterHttpModels "github.com/polar-rams/databricks-sdk-golang/azure/clusters/httpmodels"
-	clusterModels "github.com/polar-rams/databricks-sdk-golang/azure/clusters/models"
-	"github.com/polar-rams/databricks-sdk-golang/azure/libraries/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/libraries/models"
+	clusterHttpModels "github.com/gpompe/databricks-sdk-golang/azure/clusters/httpmodels"
+	clusterModels "github.com/gpompe/databricks-sdk-golang/azure/clusters/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/libraries/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/libraries/models"
 	"github.com/stretchr/testify/suite"
 )
 

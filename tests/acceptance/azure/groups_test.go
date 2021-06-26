@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/polar-rams/databricks-sdk-golang/azure/groups/httpmodels"
-	"github.com/polar-rams/databricks-sdk-golang/azure/groups/models"
+	"github.com/gpompe/databricks-sdk-golang/azure/groups/httpmodels"
+	"github.com/gpompe/databricks-sdk-golang/azure/groups/models"
 	"github.com/stretchr/testify/assert"
 )
 
